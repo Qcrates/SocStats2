@@ -32,7 +32,6 @@ highlight-style: github
 set.seed(27705)
 library(tidyverse)
 library(gt)
-library(pwr)
 ```
 
 # 1.3 ATE
@@ -96,21 +95,19 @@ None of the estimates in the above table equals to the real ATE.
 To have a general idea of how large the experiment sample should be to have statistical power, we can do a power analysis:
 
 ```{r}
-cohen_d <- 0.125/sd(d$Y)
-
 # The current power
-pwr.t.test(d = cohen_d,
+power.t.test(delta = 0.125,
            sig.level = 0.05,
-           n = 8,
-           type = "paired",
+           n = 4,
+           type = "two.sample",
            alternative = "two.sided")
 
 # What if we want to have a power of 0.8?
-pwr.t.test(d = cohen_d,
+power.t.test(delta = 0.125,
            sig.level = 0.05,
            power = 0.8,
-           type = "paired",
+           type = "two.sample",
            alternative = "two.sided")
 ```
 
-The power with 8 experiment samples is only around 0.05. If we want to have a power of 0.8, at least 9394 people should be recruited into the experiment.
+The power with 8 experiment samples is only around 0.035. If we want to have a power of 0.8, at least 2012 (1005.618 \* 2) people should be recruited into the experiment.
