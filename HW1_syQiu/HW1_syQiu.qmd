@@ -50,11 +50,22 @@ Create the `Y` variable and calculate the ATE
 
 ```{r}
 d <- d |> 
-  mutate(Y = ifelse(T == 0, Y0, Y1))
+  mutate(Y = ifelse(T == 0, Y0, Y1)) # Y = T * Y1 + (1-T) * Y0 based on the definition
 mean(d$Y[d$T == 1]) - mean(d$Y[d$T == 0])
 ```
 
 $ATE = -0.75$
+
+What leads to the difference from the actual ATE:
+
+-\> small sample (fail to randomize)
+
+Below shows that Y1 and Y0 already have difference before experiment assignments ( $T\perp Y_0$ and $T\perp Y_1$ ), the below two values should be 0 if the assignment is random.
+
+```{r}
+mean(d$Y1[d$T == 1] - d$Y1[d$T == 0])
+mean(d$Y0[d$T == 1] - d$Y0[d$T == 0])
+```
 
 # 1.4 Multiple try
 
@@ -90,7 +101,89 @@ mean(d$Y1-d$Y0)
 
 None of the estimates in the above table equals to the real ATE.
 
+Why the mean of simulation is not equal to the real effect: the sample size is too small. The number of potential assignment is finite.
+
+A fake simulation:
+
+```{r}
+# This is the full population
+fake <- tibble(
+  Y0 = rpois(10000, lambda = 2),
+  Y1 = rpois(10000, lambda = 2.125) # 0.125 is the minimum interesting effect
+)
+
+mean(fake$Y1 - fake$Y0) # True ATE. This cannot be observed in real world
+
+
+
+do_experiment <- function(n = 100){
+  # Sample
+  experiment1 <- fake |> 
+    slice_sample(n = 100) |> 
+    rowwise() |> 
+    mutate(treat = rbinom(1, 1, .5),
+               Y = treat * Y1 + (1-treat) * Y0) |> 
+    group_by(treat) |> 
+    summarise(affect = mean(Y))
+
+    ate <- experiment1$affect[experiment1$treat == 1] - experiment1$affect[experiment1$treat == 0]
+    return(ate)
+}
+
+df_ate <- tibble(iternum = c(1:1000)) |> 
+  rowwise() |> 
+  mutate(ate = do_experiment(n = 100))
+
+mean(df_ate$ate)
+sd(df_ate$ate)
+
+hist(df_ate$ate)
+
+
+get_pvalue <- function(n = 100){
+  experiment <- fake |> 
+    slice_sample(n = n) |> 
+    rowwise() |> 
+    mutate(treat = rbinom(1, 1, 0.5),
+           y = treat * Y1 + (1-treat) * Y0)
+  
+  tt <- t.test(y ~ factor(treat), data = experiment)
+  return(tt$p.value)
+}
+
+pwr_test_df <- data.frame(sample_size = 1:500) |> 
+  rowwise() |> 
+  mutate(p_value = get_pvalue(n = 1000),
+         reject = if_else(p_value < 0.05, 1L, 0L))
+
+mean(pwr_test_df$reject) # The probability to reject is the power (power argument in power.t.test)
+
+power.t.test(n = NULL, delta = 1, sd = 10, sig.level = 0.05, power = 0.8,
+             type = "two.sample", alternative = "two.sided") # delta is cohen's d if sd is 1
+```
+
 # 1.5 Power analysis
+
+-   **Update after Jan 16th class:**
+
+Power analysis:
+
+```{r}
+power.t.test(
+  delta = 0.125,
+  sig.level = 0.05,
+  sd = sd(c(d$Y0, d$Y1)),
+  power = 0.8,
+  type = "two.sample",
+  alternative = "two.sided"
+)
+```
+
+Therefore we need 14932.67 \* 2 = 29865 participants in the experiment to get enough power.
+
+**My original answer did not adjust the standard deviation:**
+
+Idea of power analysis: how large the sample should be to observe?detect? the difference?
 
 To have a general idea of how large the experiment sample should be to have statistical power, we can do a power analysis:
 
@@ -105,6 +198,15 @@ power.t.test(delta = 0.125,
 # What if we want to have a power of 0.8?
 power.t.test(delta = 0.125,
            sig.level = 0.05,
+           power = 0.8,
+           type = "two.sample",
+           alternative = "two.sided")
+
+
+# If use Cohen's d
+power.t.test(delta = 0.125,
+           sig.level = 0.05,
+           sd = sd(c(d$Y0, d$Y1)),
            power = 0.8,
            type = "two.sample",
            alternative = "two.sided")
