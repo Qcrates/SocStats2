@@ -1,0 +1,226 @@
+---
+title: "SOCIOL723 Week2"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+embed-resources: true
+mainfont: Optima
+highlight-style: github
+date: 01-20-2024
+---
+
+```{r}
+library(DiagrammeR)
+```
+
+# 2.1 Definition of "Identified"
+
+b
+
+# 2.2 Caviar and Health
+
+The original causal relationship:
+
+```{r}
+DiagrammeR::grViz("
+digraph{
+  graph []
+  node [shape = plaintext]
+    A [label = 'Eat Caviar']
+    B [label = 'Longer Lifespan']
+  edge []
+    A -> B
+}
+")
+```
+
+a.  There are many alternative explanations for this causal relationship, for example, income, education. An alternative causal diagram may be:
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Eat Caviar']
+        B [label = 'Longer Lifespan']
+        C [label = 'Education']
+        D [label = 'Income']
+      edge []
+        A -> B
+        D -> A
+        D -> B
+        C -> D
+        C -> B
+    }
+    ")
+    ```
+
+b.  If we would like to identify the answer to the original research question that "eating caviar make you live longer", we will need to observe a variation where controlling for other possible impact factors of lifespan, there is a difference in lifespan between those who eat caviar and those who do not.
+
+c.  Use the above causal diagram as an example, the researchers can isolate variation using the below ways:
+
+    1.  Matching: Find two groups of people with all the other characteristics (income, education, age, sex, ...) same but one group eat caviar and the other do not. Then compare their lifespan.
+    2.  Adjust the model: Collect the information of potential alternate explanatory factors and adjust for them in the regression model.
+
+# 2.3 Clickbaits
+
+a.  "As stock market drops, presidential approval ratings decline."
+
+    The original causal relationship implied by this deadline is as below. It makes sense that the presidential approval ratings drops when stock market drops.
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Stock Market Drop']
+        B [label = 'Presidential Approval Ratings Decline']
+      edge []
+        A -> B
+    }
+    ")
+    ```
+
+    However, these two are both associated with a decrease in public's confidence in the macro economic status. Therefore, the possible diagram can be:
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Stock Market Drop']
+        B [label = 'Presidential Approval Ratings Decline']
+        C [label = 'Decreased Confidence in Economy']
+      edge []
+        A -> B
+        C -> A
+        C -> B
+    }
+    ")
+    ```
+
+b.  “Dates are announced for the downtown summer concert series, driving up sales at downtown restaurants.”
+
+    The causal relationship indicated by this headline is as below. It is possible because people may want to have dinner before/after the concert.
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Summer Concert Date Announced']
+        B [label = 'DT Restaurants Sales Increased']
+      edge []
+        A -> B
+    }
+    ")
+    ```
+
+    However, it is possible that it's just the summer season, where sunshine is great and people are more likely to go outdoors and enjoy the summer vibe. Summer is also the concert season for its good weather and long daylight hours, and school break.
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Summer Concert Date Announced']
+        B [label = 'DT Restaurants Sales Increased']
+        C [label = 'Summer Season']
+      edge []
+        A -> B
+        C -> B
+        C -> A
+    }
+    ")
+    ```
+
+c.  “Unsanitary? Hospital visits linked to 20% increased risk of disease.”
+
+    The logic behind this clickbait is that hospital visits make people ill. Hospital may have more virus because of the concentration of patients, so this makes some sense:
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Hospital Visit']
+        B [label = 'Higher Risk of Getting Ill']
+      edge []
+        A -> B
+    }
+    ")
+    ```
+
+    However, those who visit hospitals are more likely to be those with health conditions and a weaker immune system. They are more likely to get ill no matter they visit the hospital or not.
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Hospital Visit']
+        B [label = 'Higher Risk of Getting Ill']
+        C [label = 'Health Condition and Weaker Immune Systems']
+      edge []
+        A -> B
+        C -> A
+        C -> B
+    }
+    ")
+    ```
+
+d.  “Dress for success! Every CEO follows this office-wear rule.”
+
+    The underlying logic indicated by this headline is:
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Office Dress Code']
+        B [label = 'Become A CEO']
+      edge []
+        A -> B
+    }
+    ")
+    ```
+
+    However it can be a reverse causal relationship. CEO are often those who are most adhere to the office rule. It is because this individual is a CEO that he/she is dressed in a office-style:
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        A [label = 'Office Dress Code']
+        B [label = 'Become A CEO']
+      edge []
+        B -> A
+    }
+    ")
+    ```
+
+# 2.4 Alternate explanation
+
+This third variable that causes both treatment and outcome variables are important to be identified because researchers cannot separate the variation on outcome variables is caused by the treatment or by the alternate explanation if this third variable is not block out.
+
+# 2.5 Shoes and Running Speed?
+
+a.  The data generating process (the underlying law) is that the special technique of this shoe company that is applied on this expensive professional shoes. The shoes are perhaps having
+
+    -   a lower self-weight?
+
+    -   a better grip?
+
+    -   a better shape to fit runners' feet
+
+    These characteristics make the runners perform better.
+
+b.  Alternative explanations can be that those who will spend money on such expensive professional running-shoe are those who have a running habit and have trained a lot, thus can run faster than normal people.
+
+    Another alternative explanation is the brand name ("Mr. Runner") seems to be designed for male runner...? It may be preferred by male instead of female runners. There is an average difference between these two gender groups in running speed because of unavoidable physical conditions of body structure.
+
+c.  An alternative explanation is the placebo bottom effect. In this case, people who are assigned to the treatment group to wear that fancy shoe may feel confident that they will perform better than those who wear an average show.
+
+    A possible solution will be to provide the treatment group and control group with similar-looking running shoes but treatment group shoes have that specific technique (if any) that can help runners to perform better and control group shoes do not. The runners in the study should not be informed which shoes they are wearing.
