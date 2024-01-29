@@ -318,7 +318,7 @@ d$tr <- sample(d$t)
 d$y <- ifelse(d$tr == 1, d$y1, d$y0)
 ```
 
--   The naive estimate should be larger than the real estimate
+-   The naive estimate should be close to the real estimate now, because the backdoor path has been closed by randomizing T.
 
 -   Answer check with new treatment assignment
 
@@ -341,4 +341,4 @@ d$y <- ifelse(d$tr == 1, d$y1, d$y0)
     summary(lm(formula = "y ~ tr + x", data = d))
     ```
 
-    The coefficient before x should be the direct effect, the coefficient before t should be the treatment effect.
+    The coefficient before x should be the direct effect, the coefficient before t should be the treatment effect. It becomes even closer to the actual effect after adjusting for x.
