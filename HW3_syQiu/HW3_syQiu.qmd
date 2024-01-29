@@ -1,0 +1,344 @@
+---
+title: "SOCIOL723 Homework 3"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+date: 01/28/24
+embed-resources: true
+---
+
+```{r}
+#| error: false
+library(tidyverse)
+library(DiagrammeR)
+```
+
+# 3.1 Perfectly Executed Experiment
+
+Because the potential outcomes and the treatment indicators are independent,
+
+$$
+Y^0 \perp T,   Y^1 \perp T
+$$
+
+Therefore,
+
+$$
+E(Y^0|T=1)=E(Y^0|T=0), E(Y^1|T=1)=E(Y^1|T=0)
+$$
+
+The table should be:
+
+| Group (T) | $E(Y^1)$ | $E(Y^0)$ |
+|-----------|----------|----------|
+| T = 1     | 10,000   | 5,000    |
+| T = 0     | 10,000   | 5,000    |
+
+ATE = 5,000
+
+# 3.2 Glossary
+
+-   DAG: Directed Acyclic Graph, is a tool to depict the data generating process with nodes to represent the variable and the arrows to represent the causal relationships.
+
+-   Paths: A path between two variables on a DAG is a description of the set of arrows and nodes that we have to visit when walking from one variable to another.
+
+-   Direct effects: The causal path Treatment $\rightarrow$ Outcome
+
+-   Indirect effects: The causal path between treatment and outcome that has to detour through other variables.
+
+-   Total effects: The sum of direct and indirect effects
+
+-   Front door paths: Paths where all the arrows face away from treatment
+
+-   Back door paths: The rest of the paths that are not front door paths
+
+-   Confounding: A variable that influences both the treatment and the outcome
+
+-   Collider: A variable that both arrows on either side of it point at it.
+
+-   Open Path: A path in which there is variation in all variables along the path (and no variation in any colliders on that path)
+
+-   Closed Path: A path in which there is at least one variable with no variation (or a collider with variation)
+
+# 3.3 DAG Practice
+
+I use `DiagrammeR` to plot the DAG
+
+```{r}
+DiagrammeR::grViz("
+digraph{
+  graph []
+  node [shape = plaintext]
+    T [label = 'shift hours']
+    Y [label = 'care quality']
+    A [label = 'tireness']
+    B [label = 'experience']
+    C [label = 'hospital']
+    D [label = 'policies']
+    
+  edge []
+    T -> Y
+    T -> A
+    A -> Y
+    T -> B
+    B -> Y
+    C -> T
+    C -> Y
+    D -> T
+    D -> Y
+}
+")
+```
+
+# 3.4 Public School Problem
+
+Research question: Does the funding level of public schools affect student achievement for students in your country (mainland China).
+
+a.  The treatment is the funding of public schools. The outcome of interest is students' education attainment.
+
+b.  The variable list
+
+    -   Funding of Public Schools (Treatment)
+
+    -   Students' education attainment (Outcome)
+
+    -   Local government income (GovInc)
+
+    -   Age structure of the community (Age)
+
+    -   Socio-economic status of the households in the community (SES)
+
+    -   Family's emphasis on child's education (Emphasis)
+
+c.  Socio-economic status (parents' education level, income level) will affect both the funding of public schools and students' education attainment
+
+d.  The variables that are causes of both treatment and outcome are confounders. We would like to pay extra attention to them because we would like to distinguish the effect of the treatment on outcomes from their effect on outcomes.
+
+e.  DAG
+
+    ```{r}
+    DiagrammeR::grViz("
+    digraph{
+      graph []
+      node [shape = plaintext]
+        T [label = 'funding']
+        Y [label = 'educ']
+        A [label = 'GovInc']
+        B [label = 'Age']
+        C [label = 'SES']
+        D [label = 'Emphasis']
+        
+      edge []
+        T -> Y
+        A -> T
+        B -> A
+        B -> T
+        C -> A
+        C -> Y
+        C -> D
+        D -> Y
+        B -> C
+    }
+    ")
+    ```
+
+f.  Simplified version is the same as the above
+
+# 3.5 Avoid Cyclic Relationships
+
+We can add a time dimension to get out of the cycle.
+
+Therefore we can do the DAG in this way:
+
+```{r}
+DiagrammeR::grViz("
+digraph{
+  graph []
+  node [shape = plaintext]
+    T1 [label = 'Student Achievement (t)']
+    Y1 [label = 'Motivation (t)']
+    T2 [label = 'Student Achievement (t+1)']
+    Y2 [label = 'Motivation (t+1)']
+    
+  edge []
+    T1 -> Y2
+    Y1 -> T2
+}
+")
+```
+
+# 3.6 Open and Closed Path
+
+A path is open if all of the variables along that paths are allowed to vary. And a path is closed if at least one of the variables along the path has no variation.
+
+If there is no collider on it, the difference between a path being open and closed would be whether the confounding has been controlled on that path.
+
+# 3.7 DAG Analysis
+
+a.  The list of path from X to Y
+
+    -   X -\> A -\> Y
+
+    -   X \<- B -\> Y
+
+    -   X -\> C \<- D -\> Y
+
+    -   X \<- B \<- D -\> Y
+
+    -   X -\> C \<- D -\> B -\> Y
+
+b.  Front-door paths: X -\> A -\> Y
+
+c.  Open back-door paths:
+
+    -   X \<- B -\> Y
+
+    -   X \<- B \<- D -\> Y
+
+d.  B must be controlled for
+
+# 3.8 Paths
+
+A causal path where all the arrows point away from the treatment is the front door path (**c.**)
+
+# 3.9 DAG Analysis II
+
+```{r}
+DiagrammeR::grViz("
+digraph{
+  graph []
+  node [shape = plaintext]
+    A [label = 'Teaching Quality']
+    B [label = 'NumberOfPublications']
+    C [label = 'Popularity']
+    
+  edge []
+    A -> C
+    B -> C
+}
+")
+```
+
+a.  Popularity is the collider in this diagram
+
+b.  We do not have to control for colliders (popularity here), because the path with a collider is closed by default. However, if we control for colliders, it will lead to a path open back up. In this example, when popularity is not controlled, it is the outcome of both teaching quality and number of publications, and the two causes cannot pass information via popularity. However, when we controlled popularity the same, it actually opens the path again.
+
+# 3.10 Practice with `daggle`
+
+## 4 Nodes
+
+1.  
+
+![](images/daggle-109601.png)
+
+2.  
+
+![](images/daggle-109224.png)
+
+3.  
+
+![](images/daggle-109792.png)
+
+## 6 Nodes
+
+1.  
+
+![](images/daggle-149396.png)
+
+2.  
+
+![](images/daggle-149455.png)
+
+3.  
+
+![](images/daggle-149218.png)
+
+## 8 Nodes
+
+1.  
+
+![](images/daggle-189118.png)
+
+2.  
+
+![](images/daggle-189879.png)
+
+3.  
+
+![](images/daggle-189642.png)
+
+# 3.11 Coding Practice
+
+```{r}
+setwd(dirname(getwd()))
+source("HW3_syQiu/hod_simulation_functions.r")
+
+set.seed(12345) ## include this so that grading is easier for me.
+d <- hod_simulation(N = 1e3, Bt = 2, Bx = 4, rho = 0.8)
+d
+```
+
+-   I guess the naive estimate will be larger than the real estimate, because the direct effect of X on Y is set to be 4.
+
+-   To calculate the naive estimate:
+
+    ```{r}
+    mean(d$y[d$t == 1]) - mean(d$y[d$t == 0])
+    ```
+
+    However, the real estimate should be
+
+    ```{r}
+    mean(d$y1) - mean(d$y0)
+    ```
+
+    So my guess is correct!
+
+-   If we set `rho` to -0.8. I guess the naive estimate would be smaller than the real estimate
+
+    ```{r}
+    set.seed(12345) ## include this so that grading is easier for me.
+    d <- hod_simulation(N = 1e3, Bt = 2, Bx = 4, rho = -0.8)
+    d
+
+    mean(d$y[d$t == 1]) - mean(d$y[d$t == 0]) # naive estimate
+    mean(d$y1) - mean(d$y0) # Real estimate
+    ```
+
+# 3.12 Further Practice
+
+Randomized
+
+```{r}
+set.seed(12345) ## include this so that grading is easier for me.
+d <- hod_simulation(N = 1e3, Bt = 2, Bx = 4, rho = 0.8)
+
+d$tr <- sample(d$t)
+
+d$y <- ifelse(d$tr == 1, d$y1, d$y0)
+```
+
+-   The naive estimate should be larger than the real estimate
+
+-   Answer check with new treatment assignment
+
+    ```{r}
+    mean(d$y[d$tr == 1]) - mean(d$y[d$tr == 0]) # naive estimate
+    mean(d$y1) - mean(d$y0) # Real estimate
+    ```
+
+-   `lm()`
+
+    ```{r}
+    summary(lm(formula = "y ~ tr", data = d))
+    ```
+
+    The coefficient value is equal to the naive estimate.
+
+-   With x
+
+    ```{r}
+    summary(lm(formula = "y ~ tr + x", data = d))
+    ```
+
+    The coefficient before x should be the direct effect, the coefficient before t should be the treatment effect.
