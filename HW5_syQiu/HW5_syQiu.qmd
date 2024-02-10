@@ -1,0 +1,1163 @@
+---
+title: "Homework Week 5"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+date: 02/10/2024
+---
+
+Set-up
+
+```{r}
+#| error: FALSE
+#| warnings: FALSE
+set.seed(27705)
+library(tidyverse)
+library(gssr)
+library(marginaleffects)
+library(broom)
+
+gss2022 <- gss_get_yr(2022)
+```
+
+# 5.1 Instructions
+
+```{r}
+data(mtcars)
+ols <- lm(mpg ~ disp + am, data = mtcars)
+summary(ols)
+
+new_am0 <- mtcars |> mutate(am = 0)
+new_am1 <- mtcars |> mutate(am = 1)
+
+p0 <- predict(ols, newdata = new_am0)
+p1 <- predict(ols, newdata = new_am1)
+
+
+```
+
+Bonus:
+
+```{r}
+avg_slopes(model = ols, variable = "am") |> tidy()
+# Get the estimate
+mean(p1-p0)
+# Get the standard error
+bootstrap_marginal_effects <- replicate(1000,{
+  sample_df <- mtcars[sample(nrow(mtcars), replace = TRUE),]
+  ols <- lm(mpg ~ disp + am, data = sample_df)
+  summary(ols)
+
+  new_am0 <- mtcars |> mutate(am = 0)
+  new_am1 <- mtcars |> mutate(am = 1)
+
+  p0 <- predict(ols, newdata = new_am0)
+  p1 <- predict(ols, newdata = new_am1)
+  
+  mean(p1-p0)
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+# 5.2 Linear Regression
+
+Data process:
+
+```{r}
+d <- gss2022 |> 
+  select(tvhours, degree, madeg, padeg) |> 
+  mutate(pardeg = pmax(madeg, padeg, na.rm = TRUE),
+         college = ifelse(degree >= 3, 1L, 0L),
+         parcol = ifelse(pardeg >= 3, 1L, 0L)) |> 
+  select(tvhours, college, parcol) |> 
+  drop_na()
+```
+
+## 5.2.1 Additive Link Function, No Interactions
+
+### 5.2.1.1 ATE
+
+```{r}
+mod1 <- lm(tvhours ~ college + parcol, data = d)
+
+# ATE estimate
+avg_slopes(mod1, variables = "college") |> tidy()
+```
+
+Manually calculate it:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college + parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)
+  p1 <- predict(ols, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.2.1.2 ATT/ATU
+
+```{r}
+avg_slopes(
+  model = mod1,
+  variables = "college",
+  by = "college" # separately by treatment group
+) |> 
+  tidy()
+```
+
+Manually calculate it:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college + parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)[data$college == 1]
+  p1 <- predict(ols, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college + parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)[data$college == 0]
+  p1 <- predict(ols, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.2.2 Additive Link Function, With Interactions
+
+### 5.2.2.1 ATE
+
+```{r}
+mod2 <- lm(tvhours ~ college * parcol, data = d)
+
+# ATE estimate
+avg_slopes(mod2, variables = "college") |> 
+  tidy()
+```
+
+Manually calculate it:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college * parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)
+  p1 <- predict(ols, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.2.2.2 ATT/ATU
+
+```{r}
+# ATT/ATU estimate
+avg_slopes(mod2, variables = "college", by = "college") |> tidy()
+```
+
+Manually calculate it:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college * parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)[data$college == 1]
+  p1 <- predict(ols, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  ols <- lm(tvhours ~ college * parcol, data = data)
+  summary(ols)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(ols, newdata = new0)[data$college == 0]
+  p1 <- predict(ols, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+# 5.3 Poisson Regression
+
+Data processing:
+
+```{r}
+d <- gss2022 |>
+  filter(wrkstat == 1) |> # full time workers
+  select(realrinc, degree, madeg, padeg, sex, age) |> 
+  mutate(pardeg = pmax(madeg, padeg, na.rm = TRUE),
+         college = if_else(degree >= 3, 1L, 0L),
+         parcol = if_else(pardeg >= 3, 1L, 0L),
+         female = if_else(sex == 2, 1L, 0L),
+         realrinc = floor(realrinc)) |> 
+  select(realrinc, college, parcol, female, age) |> 
+  drop_na()
+```
+
+## 5.3.1 Log-counts, No Interactions
+
+### 5.3.1.1 ATE
+
+```{r}
+qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = d,
+           family = "quasipoisson")
+
+avg_slopes(qp1, 
+           variables = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0)
+  p1 <- predict(qp1, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.3.1.2 ATT/ATU
+
+```{r}
+avg_slopes(qp1,
+           variables = "college",
+           type = "link",
+           by = "college") |> # separately by treatment group
+  tidy()
+```
+
+Manually calculated:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0)[data$college == 1]
+  p1 <- predict(qp1, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0)[data$college == 0]
+  p1 <- predict(qp1, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.3.2 Non-linear Response, No Interactions
+
+### 5.3.2.1 ATE
+
+```{r}
+avg_slopes(qp1,
+           variables = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0, type = "response")
+  p1 <- predict(qp1, newdata = new1, type = "response")
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.3.2.1 ATT/ATU
+
+```{r}
+avg_slopes(qp1,
+           variables = "college",
+           type = "response",
+           by = "college") |> # separately by treatment group
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0, type = "response")[data$college == 1]
+  p1 <- predict(qp1, newdata = new1, type = "response")[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  qp1 <- glm(realrinc ~ college + (parcol + female + age + I(age^2)),
+           data = data,
+           family = "quasipoisson")
+  summary(qp1)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp1, newdata = new0, type = "response")[data$college == 0]
+  p1 <- predict(qp1, newdata = new1, type = "response")[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.3.3 Log-counts, With Interactions
+
+```{r}
+qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = d,
+           family = "quasipoisson")
+```
+
+### 5.3.3.1 ATE
+
+```{r}
+avg_slopes(qp2,
+           variables = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0)
+  p1 <- predict(qp2, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.3.3.2 ATT/ATU
+
+```{r}
+avg_slopes(qp2,
+           variables = "college",
+           type = "link",
+           by = "college") |> # separately by treatment group
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0)[data$college == 1]
+  p1 <- predict(qp2, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0)[data$college == 0]
+  p1 <- predict(qp2, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.3.4 Non-linear With Interactions
+
+### 5.3.4.1 ATE
+
+```{r}
+avg_slopes(qp2,
+           variables = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0, type = "response")
+  p1 <- predict(qp2, newdata = new1, type = "response")
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.3.4.2 ATT/ATU
+
+```{r}
+avg_slopes(qp2,
+           variables = "college",
+           type = "response",
+           by = "college") |> # separately by treatment group
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0, type = "response")[data$college == 1]
+  p1 <- predict(qp2, newdata = new1, type = "response")[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  qp2 <- glm(realrinc ~ college * (parcol + female + age + I(age^2)), 
+           data = data,
+           family = "quasipoisson")
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(qp2, newdata = new0, type = "response")[data$college == 0]
+  p1 <- predict(qp2, newdata = new1, type = "response")[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+# 5.4 Logistic Regression
+
+Data process:
+
+```{r}
+d <- gss2022 |>
+  select(abany, degree, madeg, padeg, sex, age) |> 
+  mutate(pardeg = pmax(madeg, padeg, na.rm = TRUE),
+         college = if_else(degree >= 3, 1L, 0L),
+         parcol = if_else(pardeg >= 3, 1L, 0L),
+         female = if_else(sex == 2, 1L, 0L),
+         abany = if_else(abany == 1, 1L, 0L)) |>
+  select(abany, college, parcol, female, age) |> 
+  drop_na()
+```
+
+## 5.4.1 Log-odds, No Interactions
+
+```{r}
+lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = d,
+          family = binomial)
+```
+
+### 5.4.1.1 ATE
+
+```{r}
+# ATE estimate
+avg_slopes(lr1,
+           variables = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0)
+  p1 <- predict(lr1, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.4.1.2 ATT/ATU
+
+```{r}
+avg_slopes(lr1,
+           variables = "college",
+           by = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0)[data$college == 1]
+  p1 <- predict(lr1, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0)[data$college == 0]
+  p1 <- predict(lr1, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.4.2 Non-linear Response (Probabilities), No Interactions
+
+### 5.4.2.1 ATE
+
+```{r}
+# ATE estimate
+avg_slopes(lr1,
+           variables = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0, type = "response")
+  p1 <- predict(lr1, newdata = new1, type = "response")
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.4.2.2 ATT/ATU
+
+```{r}
+avg_slopes(lr1,
+           variables = "college",
+           by = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0, type = "response")[data$college == 1]
+  p1 <- predict(lr1, newdata = new1, type = "response")[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  lr1 <- glm(abany ~ college + (parcol + female + age + I(age^2)),
+          data = data,
+          family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr1, newdata = new0, type = "response")[data$college == 0]
+  p1 <- predict(lr1, newdata = new1, type = "response")[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.4.3 Log-odds, With Interactions
+
+```{r}
+lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+          data = d,
+          family = binomial)
+```
+
+### 5.4.3.1 ATE
+
+```{r}
+# ATE estimate
+avg_slopes(lr2,
+           variables = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+    lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr2, newdata = new0)
+  p1 <- predict(lr2, newdata = new1)
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.4.3.2 ATT/ATU
+
+```{r}
+avg_slopes(lr2,
+           variables = "college",
+           by = "college",
+           type = "link") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+  
+  p0 <- predict(lr2, newdata = new0)[data$college == 1]
+  p1 <- predict(lr2, newdata = new1)[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr2, newdata = new0)[data$college == 0]
+  p1 <- predict(lr2, newdata = new1)[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+## 5.4.4 Non-linear Response (Probabilities), With Interactions
+
+### 5.4.4.1 ATE
+
+```{r}
+# ATE estimate
+avg_slopes(lr2,
+           variables = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# Estimate
+calc_mean <- function(data){
+    lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr2, newdata = new0, type = "response")
+  p1 <- predict(lr2, newdata = new1, type = "response")
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+# Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
+
+### 5.4.4.2 ATT/ATU
+
+```{r}
+avg_slopes(lr2,
+           variables = "college",
+           by = "college",
+           type = "response") |> 
+  tidy()
+```
+
+Manually calculated as:
+
+```{r}
+# ATT
+## Estimate
+calc_mean <- function(data){
+  lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+  
+  p0 <- predict(lr2, newdata = new0, type = "response")[data$college == 1]
+  p1 <- predict(lr2, newdata = new1, type = "response")[data$college == 1]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+
+# ATU
+## Estimate
+calc_mean <- function(data){
+  lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+               data = data,
+               family = binomial)
+
+  new0 <- d |> mutate(college = 0)
+  new1 <- d |> mutate(college = 1)
+
+  p0 <- predict(lr2, newdata = new0, type = "response")[data$college == 0]
+  p1 <- predict(lr2, newdata = new1, type = "response")[data$college == 0]
+  
+  return(mean(p1-p0))
+}
+
+calc_mean(d)
+
+## Standard error
+bootstrap_marginal_effects <- replicate(1000, {
+  calc_mean(d[sample(nrow(d), replace = TRUE),])
+})
+
+sd(bootstrap_marginal_effects)
+```
