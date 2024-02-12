@@ -3,7 +3,7 @@ title: "Homework Week 5"
 author: "Shuyi Qiu"
 format: html
 editor: visual
-date: 02/10/2024
+date: 02/12/2024
 ---
 
 Set-up
@@ -48,8 +48,8 @@ bootstrap_marginal_effects <- replicate(1000,{
   ols <- lm(mpg ~ disp + am, data = sample_df)
   summary(ols)
 
-  new_am0 <- mtcars |> mutate(am = 0)
-  new_am1 <- mtcars |> mutate(am = 1)
+  new_am0 <- sample_df |> mutate(am = 0)
+  new_am1 <- sample_df |> mutate(am = 1)
 
   p0 <- predict(ols, newdata = new_am0)
   p1 <- predict(ols, newdata = new_am1)
@@ -93,8 +93,8 @@ calc_mean <- function(data){
   ols <- lm(tvhours ~ college + parcol, data = data)
   summary(ols)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(ols, newdata = new0)
   p1 <- predict(ols, newdata = new1)
@@ -132,8 +132,8 @@ calc_mean <- function(data){
   ols <- lm(tvhours ~ college + parcol, data = data)
   summary(ols)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(ols, newdata = new0)[data$college == 1]
   p1 <- predict(ols, newdata = new1)[data$college == 1]
@@ -156,8 +156,8 @@ calc_mean <- function(data){
   ols <- lm(tvhours ~ college + parcol, data = data)
   summary(ols)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(ols, newdata = new0)[data$college == 0]
   p1 <- predict(ols, newdata = new1)[data$college == 0]
@@ -230,8 +230,8 @@ calc_mean <- function(data){
   ols <- lm(tvhours ~ college * parcol, data = data)
   summary(ols)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(ols, newdata = new0)[data$college == 1]
   p1 <- predict(ols, newdata = new1)[data$college == 1]
@@ -254,8 +254,8 @@ calc_mean <- function(data){
   ols <- lm(tvhours ~ college * parcol, data = data)
   summary(ols)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(ols, newdata = new0)[data$college == 0]
   p1 <- predict(ols, newdata = new1)[data$college == 0]
@@ -315,8 +315,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0)
   p1 <- predict(qp1, newdata = new1)
@@ -355,8 +355,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0)[data$college == 1]
   p1 <- predict(qp1, newdata = new1)[data$college == 1]
@@ -381,8 +381,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0)[data$college == 0]
   p1 <- predict(qp1, newdata = new1)[data$college == 0]
@@ -421,8 +421,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0, type = "response")
   p1 <- predict(qp1, newdata = new1, type = "response")
@@ -461,8 +461,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0, type = "response")[data$college == 1]
   p1 <- predict(qp1, newdata = new1, type = "response")[data$college == 1]
@@ -487,8 +487,8 @@ calc_mean <- function(data){
            family = "quasipoisson")
   summary(qp1)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp1, newdata = new0, type = "response")[data$college == 0]
   p1 <- predict(qp1, newdata = new1, type = "response")[data$college == 0]
@@ -532,8 +532,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0)
   p1 <- predict(qp2, newdata = new1)
@@ -571,8 +571,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0)[data$college == 1]
   p1 <- predict(qp2, newdata = new1)[data$college == 1]
@@ -596,8 +596,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0)[data$college == 0]
   p1 <- predict(qp2, newdata = new1)[data$college == 0]
@@ -635,8 +635,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0, type = "response")
   p1 <- predict(qp2, newdata = new1, type = "response")
@@ -674,8 +674,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0, type = "response")[data$college == 1]
   p1 <- predict(qp2, newdata = new1, type = "response")[data$college == 1]
@@ -699,8 +699,8 @@ calc_mean <- function(data){
            data = data,
            family = "quasipoisson")
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(qp2, newdata = new0, type = "response")[data$college == 0]
   p1 <- predict(qp2, newdata = new1, type = "response")[data$college == 0]
@@ -761,8 +761,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0)
   p1 <- predict(lr1, newdata = new1)
@@ -800,8 +800,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0)[data$college == 1]
   p1 <- predict(lr1, newdata = new1)[data$college == 1]
@@ -825,8 +825,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0)[data$college == 0]
   p1 <- predict(lr1, newdata = new1)[data$college == 0]
@@ -865,8 +865,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0, type = "response")
   p1 <- predict(lr1, newdata = new1, type = "response")
@@ -904,8 +904,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0, type = "response")[data$college == 1]
   p1 <- predict(lr1, newdata = new1, type = "response")[data$college == 1]
@@ -929,8 +929,8 @@ calc_mean <- function(data){
           data = data,
           family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr1, newdata = new0, type = "response")[data$college == 0]
   p1 <- predict(lr1, newdata = new1, type = "response")[data$college == 0]
@@ -971,12 +971,12 @@ Manually calculated as:
 ```{r}
 # Estimate
 calc_mean <- function(data){
-    lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
+  lr2 <- glm(abany ~ college * (parcol + female + age + I(age^2)),
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr2, newdata = new0)
   p1 <- predict(lr2, newdata = new1)
@@ -984,7 +984,6 @@ calc_mean <- function(data){
   return(mean(p1-p0))
 }
 
-calc_mean(d)
 
 # Standard error
 bootstrap_marginal_effects <- replicate(1000, {
@@ -1014,8 +1013,8 @@ calc_mean <- function(data){
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
   
   p0 <- predict(lr2, newdata = new0)[data$college == 1]
   p1 <- predict(lr2, newdata = new1)[data$college == 1]
@@ -1039,8 +1038,8 @@ calc_mean <- function(data){
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr2, newdata = new0)[data$college == 0]
   p1 <- predict(lr2, newdata = new1)[data$college == 0]
@@ -1079,8 +1078,8 @@ calc_mean <- function(data){
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr2, newdata = new0, type = "response")
   p1 <- predict(lr2, newdata = new1, type = "response")
@@ -1118,8 +1117,8 @@ calc_mean <- function(data){
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
   
   p0 <- predict(lr2, newdata = new0, type = "response")[data$college == 1]
   p1 <- predict(lr2, newdata = new1, type = "response")[data$college == 1]
@@ -1143,8 +1142,8 @@ calc_mean <- function(data){
                data = data,
                family = binomial)
 
-  new0 <- d |> mutate(college = 0)
-  new1 <- d |> mutate(college = 1)
+  new0 <- data |> mutate(college = 0)
+  new1 <- data |> mutate(college = 1)
 
   p0 <- predict(lr2, newdata = new0, type = "response")[data$college == 0]
   p1 <- predict(lr2, newdata = new1, type = "response")[data$college == 0]

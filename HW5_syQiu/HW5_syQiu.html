@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shuyi Qiu">
-<meta name="dcterms.date" content="2024-02-10">
+<meta name="dcterms.date" content="2024-02-12">
 
 <title>Homework Week 5</title>
 <style>
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 10, 2024</p>
+      <p class="date">February 12, 2024</p>
     </div>
   </div>
   
@@ -192,8 +192,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> am, <span class="at">data =</span> sample_df)</span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  new_am0 <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">am =</span> <span class="dv">0</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  new_am1 <span class="ot">&lt;-</span> mtcars <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">am =</span> <span class="dv">1</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  new_am0 <span class="ot">&lt;-</span> sample_df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">am =</span> <span class="dv">0</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  new_am1 <span class="ot">&lt;-</span> sample_df <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">am =</span> <span class="dv">1</span>)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new_am0)</span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new_am1)</span>
@@ -242,8 +242,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> college <span class="sc">+</span> parcol, <span class="at">data =</span> data)</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new0)</span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new1)</span>
@@ -293,8 +293,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> college <span class="sc">+</span> parcol, <span class="at">data =</span> data)</span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -321,8 +321,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> college <span class="sc">+</span> parcol, <span class="at">data =</span> data)</span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -417,8 +417,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> college <span class="sc">*</span> parcol, <span class="at">data =</span> data)</span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -437,7 +437,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1242081</code></pre>
+<pre><code>[1] 0.1412024</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
@@ -445,8 +445,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(tvhours <span class="sc">~</span> college <span class="sc">*</span> parcol, <span class="at">data =</span> data)</span>
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(ols)</span>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(ols, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -465,7 +465,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1291504</code></pre>
+<pre><code>[1] 0.1309518</code></pre>
 </div>
 </div>
 </section>
@@ -516,8 +516,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0)</span>
 <span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1)</span>
@@ -568,8 +568,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -598,8 +598,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -649,8 +649,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
@@ -669,7 +669,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1847.788</code></pre>
+<pre><code>[1] 1874.727</code></pre>
 </div>
 </div>
 </section>
@@ -701,8 +701,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -721,7 +721,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2018.545</code></pre>
+<pre><code>[1] 2047.613</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
 <span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
@@ -731,8 +731,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(qp1)</span>
 <span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -751,7 +751,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1887.098</code></pre>
+<pre><code>[1] 1920.264</code></pre>
 </div>
 </div>
 </section>
@@ -786,8 +786,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0)</span>
 <span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1)</span>
@@ -806,7 +806,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.04974215</code></pre>
+<pre><code>[1] 0.04955563</code></pre>
 </div>
 </div>
 </section>
@@ -837,8 +837,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb91-11"><a href="#cb91-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb91-12"><a href="#cb91-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -857,7 +857,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.04978391</code></pre>
+<pre><code>[1] 0.05614274</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
 <span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
@@ -866,8 +866,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -886,7 +886,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.04954652</code></pre>
+<pre><code>[1] 0.0525008</code></pre>
 </div>
 </div>
 </section>
@@ -916,8 +916,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
@@ -936,7 +936,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1952.092</code></pre>
+<pre><code>[1] 1978.726</code></pre>
 </div>
 </div>
 </section>
@@ -967,8 +967,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb107-10"><a href="#cb107-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb107-11"><a href="#cb107-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb107-12"><a href="#cb107-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -987,7 +987,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1874.983</code></pre>
+<pre><code>[1] 2000.264</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
 <span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
@@ -996,8 +996,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb111-5"><a href="#cb111-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">data =</span> data,</span>
 <span id="cb111-6"><a href="#cb111-6" aria-hidden="true" tabindex="-1"></a>           <span class="at">family =</span> <span class="st">"quasipoisson"</span>)</span>
 <span id="cb111-7"><a href="#cb111-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb111-8"><a href="#cb111-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb111-9"><a href="#cb111-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb111-8"><a href="#cb111-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb111-9"><a href="#cb111-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb111-10"><a href="#cb111-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb111-11"><a href="#cb111-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb111-12"><a href="#cb111-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(qp2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -1016,7 +1016,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb113-5"><a href="#cb113-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb113-6"><a href="#cb113-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1924.614</code></pre>
+<pre><code>[1] 2085.955</code></pre>
 </div>
 </div>
 </section>
@@ -1066,8 +1066,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb119-9"><a href="#cb119-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb119-10"><a href="#cb119-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0)</span>
 <span id="cb119-11"><a href="#cb119-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1)</span>
@@ -1117,8 +1117,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb125-5"><a href="#cb125-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb125-6"><a href="#cb125-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb125-7"><a href="#cb125-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb125-8"><a href="#cb125-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb125-9"><a href="#cb125-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb125-8"><a href="#cb125-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb125-9"><a href="#cb125-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb125-10"><a href="#cb125-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb125-11"><a href="#cb125-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb125-12"><a href="#cb125-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -1146,8 +1146,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb129-5"><a href="#cb129-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb129-6"><a href="#cb129-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb129-7"><a href="#cb129-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb129-8"><a href="#cb129-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb129-9"><a href="#cb129-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb129-8"><a href="#cb129-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb129-9"><a href="#cb129-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb129-10"><a href="#cb129-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb129-11"><a href="#cb129-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb129-12"><a href="#cb129-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -1196,8 +1196,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb135-9"><a href="#cb135-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb135-10"><a href="#cb135-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)</span>
 <span id="cb135-11"><a href="#cb135-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
@@ -1216,7 +1216,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03470901</code></pre>
+<pre><code>[1] 0.03470754</code></pre>
 </div>
 </div>
 </section>
@@ -1247,8 +1247,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb141-5"><a href="#cb141-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb141-6"><a href="#cb141-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb141-7"><a href="#cb141-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb141-8"><a href="#cb141-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb141-9"><a href="#cb141-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb141-8"><a href="#cb141-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb141-9"><a href="#cb141-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb141-10"><a href="#cb141-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb141-11"><a href="#cb141-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
 <span id="cb141-12"><a href="#cb141-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
@@ -1267,7 +1267,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb143-5"><a href="#cb143-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb143-6"><a href="#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03412537</code></pre>
+<pre><code>[1] 0.03358871</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
 <span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
@@ -1276,8 +1276,8 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb145-5"><a href="#cb145-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> data,</span>
 <span id="cb145-6"><a href="#cb145-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> binomial)</span>
 <span id="cb145-7"><a href="#cb145-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb145-8"><a href="#cb145-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb145-9"><a href="#cb145-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb145-8"><a href="#cb145-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb145-9"><a href="#cb145-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb145-10"><a href="#cb145-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb145-11"><a href="#cb145-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
 <span id="cb145-12"><a href="#cb145-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr1, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
@@ -1296,7 +1296,7 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb147-5"><a href="#cb147-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb147-6"><a href="#cb147-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03377636</code></pre>
+<pre><code>[1] 0.03420759</code></pre>
 </div>
 </div>
 </section>
@@ -1327,12 +1327,12 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb152"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate</span></span>
 <span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a>    lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
 <span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
 <span id="cb152-5"><a href="#cb152-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
 <span id="cb152-6"><a href="#cb152-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-7"><a href="#cb152-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb152-8"><a href="#cb152-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb152-7"><a href="#cb152-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb152-8"><a href="#cb152-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
 <span id="cb152-9"><a href="#cb152-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb152-10"><a href="#cb152-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0)</span>
 <span id="cb152-11"><a href="#cb152-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1)</span>
@@ -1340,29 +1340,26 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <span id="cb152-13"><a href="#cb152-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
 <span id="cb152-14"><a href="#cb152-14" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb152-15"><a href="#cb152-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-16"><a href="#cb152-16" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb152-16"><a href="#cb152-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-17"><a href="#cb152-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
+<span id="cb152-18"><a href="#cb152-18" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb152-19"><a href="#cb152-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb152-20"><a href="#cb152-20" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb152-21"><a href="#cb152-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb152-22"><a href="#cb152-22" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.4529746</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
-<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb154-5"><a href="#cb154-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb154-6"><a href="#cb154-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1524332</code></pre>
+<pre><code>[1] 0.1523143</code></pre>
 </div>
 </div>
 </section>
 <section id="attatu-8" class="level3">
 <h3 class="anchored" data-anchor-id="attatu-8">5.4.3.2 ATT/ATU</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
-<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
-<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">by =</span> <span class="st">"college"</span>,</span>
-<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"link"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb156-5"><a href="#cb156-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb154"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
+<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">by =</span> <span class="st">"college"</span>,</span>
+<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"link"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb154-5"><a href="#cb154-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 13
   term    contrast college estimate std.error statistic p.value s.value conf.low
@@ -1375,63 +1372,63 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 </div>
 <p>Manually calculated as:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATT</span></span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
-<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
-<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
-<span id="cb158-7"><a href="#cb158-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-8"><a href="#cb158-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb158-9"><a href="#cb158-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
-<span id="cb158-10"><a href="#cb158-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb158-11"><a href="#cb158-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb158-12"><a href="#cb158-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb158-13"><a href="#cb158-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb158-14"><a href="#cb158-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
-<span id="cb158-15"><a href="#cb158-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb158-16"><a href="#cb158-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-17"><a href="#cb158-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb156"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATT</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb156-5"><a href="#cb156-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
+<span id="cb156-6"><a href="#cb156-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
+<span id="cb156-7"><a href="#cb156-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-8"><a href="#cb156-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb156-9"><a href="#cb156-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb156-10"><a href="#cb156-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb156-11"><a href="#cb156-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb156-12"><a href="#cb156-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb156-13"><a href="#cb156-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb156-14"><a href="#cb156-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
+<span id="cb156-15"><a href="#cb156-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb156-16"><a href="#cb156-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb156-17"><a href="#cb156-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4578862</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
-<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb158"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1489997</code></pre>
+<pre><code>[1] 0.1625322</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
-<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
-<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
-<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
-<span id="cb162-7"><a href="#cb162-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb162-8"><a href="#cb162-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb162-9"><a href="#cb162-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
-<span id="cb162-10"><a href="#cb162-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb162-11"><a href="#cb162-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
-<span id="cb162-12"><a href="#cb162-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
-<span id="cb162-13"><a href="#cb162-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb162-14"><a href="#cb162-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
-<span id="cb162-15"><a href="#cb162-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb162-16"><a href="#cb162-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb162-17"><a href="#cb162-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb160"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
+<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
+<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
+<span id="cb160-7"><a href="#cb160-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-8"><a href="#cb160-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb160-9"><a href="#cb160-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb160-10"><a href="#cb160-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-11"><a href="#cb160-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb160-12"><a href="#cb160-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb160-13"><a href="#cb160-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb160-14"><a href="#cb160-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
+<span id="cb160-15"><a href="#cb160-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb160-16"><a href="#cb160-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb160-17"><a href="#cb160-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.4499502</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
-<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb164-5"><a href="#cb164-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-6"><a href="#cb164-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb162"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
+<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1507749</code></pre>
+<pre><code>[1] 0.1613047</code></pre>
 </div>
 </div>
 </section>
@@ -1441,11 +1438,11 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 <section id="ate-9" class="level3">
 <h3 class="anchored" data-anchor-id="ate-9">5.4.4.1 ATE</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATE estimate</span></span>
-<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
-<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
-<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb164"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATE estimate</span></span>
+<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
+<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
+<span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb164-5"><a href="#cb164-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 9
   term  contrast estimate std.error statistic p.value s.value conf.low conf.high
@@ -1455,44 +1452,44 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 </div>
 <p>Manually calculated as:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate</span></span>
-<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb168-3"><a href="#cb168-3" aria-hidden="true" tabindex="-1"></a>    lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb168-4"><a href="#cb168-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
-<span id="cb168-5"><a href="#cb168-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
-<span id="cb168-6"><a href="#cb168-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-7"><a href="#cb168-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb168-8"><a href="#cb168-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
-<span id="cb168-9"><a href="#cb168-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-10"><a href="#cb168-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb168-11"><a href="#cb168-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb168-12"><a href="#cb168-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb168-13"><a href="#cb168-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
-<span id="cb168-14"><a href="#cb168-14" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb168-15"><a href="#cb168-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb168-16"><a href="#cb168-16" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb166"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate</span></span>
+<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a>    lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
+<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
+<span id="cb166-6"><a href="#cb166-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb166-7"><a href="#cb166-7" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb166-8"><a href="#cb166-8" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb166-9"><a href="#cb166-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb166-10"><a href="#cb166-10" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb166-11"><a href="#cb166-11" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb166-12"><a href="#cb166-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb166-13"><a href="#cb166-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
+<span id="cb166-14"><a href="#cb166-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb166-15"><a href="#cb166-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb166-16"><a href="#cb166-16" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1031614</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
-<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb170-6"><a href="#cb170-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb168"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard error</span></span>
+<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb168-3"><a href="#cb168-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb168-4"><a href="#cb168-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb168-5"><a href="#cb168-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-6"><a href="#cb168-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03424275</code></pre>
+<pre><code>[1] 0.03417957</code></pre>
 </div>
 </div>
 </section>
 <section id="attatu-9" class="level3">
 <h3 class="anchored" data-anchor-id="attatu-9">5.4.4.2 ATT/ATU</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
-<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
-<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">by =</span> <span class="st">"college"</span>,</span>
-<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb170"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_slopes</span>(lr2,</span>
+<span id="cb170-2"><a href="#cb170-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">variables =</span> <span class="st">"college"</span>,</span>
+<span id="cb170-3"><a href="#cb170-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">by =</span> <span class="st">"college"</span>,</span>
+<span id="cb170-4"><a href="#cb170-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb170-5"><a href="#cb170-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 13
   term    contrast college estimate std.error statistic p.value s.value conf.low
@@ -1505,63 +1502,63 @@ F-statistic: 39.87 on 2 and 29 DF,  p-value: 4.749e-09</code></pre>
 </div>
 <p>Manually calculated as:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATT</span></span>
-<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
-<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
-<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
-<span id="cb174-7"><a href="#cb174-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-8"><a href="#cb174-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb174-9"><a href="#cb174-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
-<span id="cb174-10"><a href="#cb174-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb174-11"><a href="#cb174-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb174-12"><a href="#cb174-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
-<span id="cb174-13"><a href="#cb174-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb174-14"><a href="#cb174-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
-<span id="cb174-15"><a href="#cb174-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb174-16"><a href="#cb174-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb174-17"><a href="#cb174-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb172"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATT</span></span>
+<span id="cb172-2"><a href="#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
+<span id="cb172-3"><a href="#cb172-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb172-4"><a href="#cb172-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb172-5"><a href="#cb172-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
+<span id="cb172-6"><a href="#cb172-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
+<span id="cb172-7"><a href="#cb172-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-8"><a href="#cb172-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb172-9"><a href="#cb172-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb172-10"><a href="#cb172-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb172-11"><a href="#cb172-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb172-12"><a href="#cb172-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb172-13"><a href="#cb172-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb172-14"><a href="#cb172-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
+<span id="cb172-15"><a href="#cb172-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb172-16"><a href="#cb172-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb172-17"><a href="#cb172-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1012043</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
-<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb174"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
+<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb174-4"><a href="#cb174-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb174-5"><a href="#cb174-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-6"><a href="#cb174-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03244964</code></pre>
+<pre><code>[1] 0.03439741</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
-<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
-<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
-<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
-<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
-<span id="cb178-7"><a href="#cb178-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-8"><a href="#cb178-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
-<span id="cb178-9"><a href="#cb178-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
-<span id="cb178-10"><a href="#cb178-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-11"><a href="#cb178-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
-<span id="cb178-12"><a href="#cb178-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
-<span id="cb178-13"><a href="#cb178-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb178-14"><a href="#cb178-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
-<span id="cb178-15"><a href="#cb178-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb178-16"><a href="#cb178-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb178-17"><a href="#cb178-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb176"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ATU</span></span>
+<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Estimate</span></span>
+<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>calc_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data){</span>
+<span id="cb176-4"><a href="#cb176-4" aria-hidden="true" tabindex="-1"></a>  lr2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(abany <span class="sc">~</span> college <span class="sc">*</span> (parcol <span class="sc">+</span> female <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb176-5"><a href="#cb176-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> data,</span>
+<span id="cb176-6"><a href="#cb176-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> binomial)</span>
+<span id="cb176-7"><a href="#cb176-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-8"><a href="#cb176-8" aria-hidden="true" tabindex="-1"></a>  new0 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">0</span>)</span>
+<span id="cb176-9"><a href="#cb176-9" aria-hidden="true" tabindex="-1"></a>  new1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">college =</span> <span class="dv">1</span>)</span>
+<span id="cb176-10"><a href="#cb176-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-11"><a href="#cb176-11" aria-hidden="true" tabindex="-1"></a>  p0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new0, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb176-12"><a href="#cb176-12" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(lr2, <span class="at">newdata =</span> new1, <span class="at">type =</span> <span class="st">"response"</span>)[data<span class="sc">$</span>college <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb176-13"><a href="#cb176-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb176-14"><a href="#cb176-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">mean</span>(p1<span class="sc">-</span>p0))</span>
+<span id="cb176-15"><a href="#cb176-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb176-16"><a href="#cb176-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb176-17"><a href="#cb176-17" aria-hidden="true" tabindex="-1"></a><span class="fu">calc_mean</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1043664</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb180"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
-<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
-<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb180-5"><a href="#cb180-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb180-6"><a href="#cb180-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb178"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Standard error</span></span>
+<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>bootstrap_marginal_effects <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">calc_mean</span>(d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),])</span>
+<span id="cb178-4"><a href="#cb178-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb178-5"><a href="#cb178-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb178-6"><a href="#cb178-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(bootstrap_marginal_effects)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.03384269</code></pre>
+<pre><code>[1] 0.03543589</code></pre>
 </div>
 </div>
 </section>
