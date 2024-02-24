@@ -1,0 +1,188 @@
+---
+title: "Homework 7"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+---
+
+Set-up
+
+```{r}
+#| error: false
+#| warning: false
+# Packages ---
+
+library(tidyverse)
+library(broom)
+library(cobalt)
+library(MatchIt)
+library(WeightIt)
+
+# Helper Functions ---
+
+love_plot <- function(x) {
+  cobalt::love.plot(x, 
+    binary = "std" ,
+    stats = c("m", "ks") ,
+    thresholds = c(.1, .05),
+    var.order = "adjusted",
+    abs = TRUE
+  )
+}
+
+getwd()
+```
+
+# 7.1 Matching and Weighting
+
+Load the data
+
+```{r}
+load("exercise_data.Rdata")
+str(d)
+str(d_exper)
+```
+
+Some preparation:
+
+```{r}
+d <- d |> 
+  mutate(
+    treat_fct = as.factor(treat),
+    inc_org = max(re74, re75)
+    )
+
+d_exper <- d_exper |> 
+  mutate(treat_fct = as.factor(treat)
+    )
+```
+
+## 7.1.1 Raw Difference (Naive estimate)
+
+Without any weighting/matching process:
+
+```{r}
+mean(d_exper$re78[d_exper$treat == 1]) - mean(d_exper$re78[d_exper$treat == 0]) # Experimental subset
+mean(d$re78[d$treat == 1]) - mean(d$re78[d$treat == 0]) # Observational dataset
+```
+
+If we look at the experiment subset data, the effect of the job training treatment seems to be \$0.89k.
+
+However, when we look at the observational data, it seems that the treatment effect is negative \$16.54k, which means receiving the training program makes people's income decrease by 16.54 thousand dollars compared to those who did not receive. This is just naive estimate and we will need to consider other factors that may contribute to income gap in the following analysis to find out the actual effect of the job training program.
+
+## 7.1.2 Regression
+
+```{r}
+# Crude regression without any adjustments
+mod0 <- lm(re78 ~ treat, data = d)
+summary(mod0)
+
+# Regression adjust for income and other socio-economic status
+mod1 <- lm(re78 ~ treat + age + educ + black + hisp + married + re74 + re75, data = d)
+summary(mod1)
+```
+
+The regression still shows that the effect of the program is negative (though not significant after we adjust for the income level)
+
+## 7.1.3 Exact matching
+
+```{r}
+ematch <- 
+  matchit(treat ~ black + hisp + married + nodegr + u74 + u75, 
+          data = d,
+          method = "exact")
+summary(ematch)[[2]]
+
+ematch_data <- match.data(ematch)
+emod <- lm(formula = re78 ~ treat, data = ematch_data, weights = weights)
+summary(emod)
+```
+
+10 treated cases cannot be matched.
+
+FSATT is negative \$2.39k, which means those who participated in the training program have \$2.39k compared to those did not.
+
+## 7.1.4 Propensity score use `glm()` 
+
+```{r}
+ps_mod <- glm(formula = treat ~ age + I(age^2) + educ + I(educ^2) + black + hisp + married + nodegr + re74 + I(re74^2) + re75 + I(re75^2) + u74 + u75, data = d, family = "binomial")
+summary(ps_mod)
+d$ps <- predict(ps_mod, data = d, type = "response")
+
+# Box plot
+d |> ggplot(aes(x = ps)) +
+  geom_density() + 
+  facet_wrap(~treat, nrow = 2, ncol = 1) +
+  theme_minimal()
+```
+
+The result shows that lower income (or no income), being black or hispanic, and being unmarried are positively associated with receiving the training program.
+
+Besides, age is non-linearly associated with receiving the treatment. With $\frac{0.8447}{(-2) * (-0.0468)} \approx 9$ as a boundary line, for those who receive less than 9 years of education, one more year of education is positively associated with participating in the training program, while for those who have more than 9 years of education, one more year of education is negatively associated with participating in the training program.
+
+From the density plot, we can see that those who actually treated has a higher propensity score, while the distribution of propensity score centers around 0 for the controlled group.
+
+## 7.1.5 ATT using `weightit()` 
+
+```{r}
+psmatch <- weightit(treat ~ age + I(age^2) + educ + I(educ^2) + black + hisp + married + nodegr + re74 + I(re74^2) + re75 + I(re75^2) + u74 + u75, 
+               method = "ps",
+               estimand = "ATT",
+               data = d)
+
+love_plot(psmatch)
+
+psmod <- lm(re78 ~ treat, data = d, weights = psmatch$weights)
+
+summary(psmod)
+```
+
+Only part of the covariates look balanced after adjustments.
+
+After weighting by the propensity score, the ATT is 1.14 (finally positive! though still a little different from the actual effect we can get from the experimental data.
+
+## 7.1.6 Entropy balancing
+
+```{r}
+etmatch <- weightit(treat ~ age + I(age^2) + educ + I(educ^2) + black + hisp + married + nodegr + re74 + I(re74^2) + re75 + I(re75^2) + u74 + u75, 
+               method = "ebal",
+               moments = 3,
+               estimand = "ATT",
+               data = d)
+
+love_plot(etmatch)
+
+etmod <- lm(re78 ~ treat, data = d, weights = etmatch$weights)
+
+summary(etmod)
+```
+
+The balance looks better than the propensity score method. The ATT is 0.174.
+
+## 7.1.7 Standard error using bootstrapping
+
+```{r}
+psm_func <- function(d){
+  sample_d <- d[sample(nrow(d), replace = TRUE),]
+  
+  psmatch <- weightit(treat ~ age + I(age^2) + educ + I(educ^2) + black + hisp + married + nodegr + re74 + I(re74^2) + re75 + I(re75^2) + u74 + u75, 
+               method = "ps",
+               estimand = "ATT",
+               data = sample_d)
+
+  est <- weighted.mean(sample_d$re78[sample_d$treat == 1], w = psmatch$weights[sample_d$treat == 1]) - weighted.mean(sample_d$re78[sample_d$treat == 0], w = psmatch$weights[sample_d$treat == 0])
+
+  return(est)
+}
+
+sim_size <- 3000
+
+sim_df <- data.frame(
+  sim_id = c(1:sim_size)
+) |> 
+  rowwise() |> 
+  mutate(coef = psm_func(d))
+
+mean(sim_df$coef)
+sd(sim_df$coef)
+```

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shuyi Qiu">
+
+<title>Homework 7</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="HW7_syQiu_files/libs/clipboard/clipboard.min.js"></script>
+<script src="HW7_syQiu_files/libs/quarto-html/quarto.js"></script>
+<script src="HW7_syQiu_files/libs/quarto-html/popper.min.js"></script>
+<script src="HW7_syQiu_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="HW7_syQiu_files/libs/quarto-html/anchor.min.js"></script>
+<link href="HW7_syQiu_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="HW7_syQiu_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="HW7_syQiu_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="HW7_syQiu_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="HW7_syQiu_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Homework 7</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Shuyi Qiu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Set-up</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages ---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cobalt)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WeightIt)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper Functions ---</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>love_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  cobalt<span class="sc">::</span><span class="fu">love.plot</span>(x, </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">binary =</span> <span class="st">"std"</span> ,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">stats =</span> <span class="fu">c</span>(<span class="st">"m"</span>, <span class="st">"ks"</span>) ,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">thresholds =</span> <span class="fu">c</span>(.<span class="dv">1</span>, .<span class="dv">05</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">var.order =</span> <span class="st">"adjusted"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">abs =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/Users/RachelChiu/Documents/Sanford/PhD/2024Spring/SOCIOL723/SocStats2/HW7_syQiu"</code></pre>
+</div>
+</div>
+<section id="matching-and-weighting" class="level1">
+<h1>7.1 Matching and Weighting</h1>
+<p>Load the data</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"exercise_data.Rdata"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   2510 obs. of  12 variables:
+ $ treat  : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ age    : int  47 44 47 25 44 50 49 55 52 52 ...
+ $ educ   : int  12 12 12 12 12 12 14 13 12 15 ...
+ $ black  : int  0 0 0 1 0 1 0 0 0 0 ...
+ $ hisp   : int  0 0 0 0 0 0 0 1 0 0 ...
+ $ married: int  0 0 1 0 1 1 1 1 1 1 ...
+ $ nodegr : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ re74   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ re75   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ re78   : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ u74    : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ u75    : num  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(d_exper)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   722 obs. of  12 variables:
+ $ treat  : int  1 1 0 1 0 0 0 0 1 0 ...
+ $ age    : int  33 20 39 49 26 38 28 27 33 44 ...
+ $ educ   : int  12 12 12 8 8 10 12 12 12 9 ...
+ $ black  : int  0 0 1 0 0 1 0 1 1 1 ...
+ $ hisp   : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ married: int  1 1 1 1 1 1 0 1 1 1 ...
+ $ nodegr : int  0 0 0 1 1 1 0 0 0 1 ...
+ $ re74   : num  0 8.64 19.79 9.71 37.21 ...
+ $ re75   : num  0 8.64 6.61 7.29 36.94 ...
+ $ re78   : num  12.418 11.657 0.499 16.717 30.247 ...
+ $ u74    : num  1 0 0 0 0 0 1 1 0 0 ...
+ $ u75    : num  1 0 0 0 0 0 0 0 0 0 ...</code></pre>
+</div>
+</div>
+<p>Some preparation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">treat_fct =</span> <span class="fu">as.factor</span>(treat),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">inc_org =</span> <span class="fu">max</span>(re74, re75)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>d_exper <span class="ot">&lt;-</span> d_exper <span class="sc">|&gt;</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">treat_fct =</span> <span class="fu">as.factor</span>(treat)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="raw-difference-naive-estimate" class="level2">
+<h2 class="anchored" data-anchor-id="raw-difference-naive-estimate">7.1.1 Raw Difference (Naive estimate)</h2>
+<p>Without any weighting/matching process:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(d_exper<span class="sc">$</span>re78[d_exper<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(d_exper<span class="sc">$</span>re78[d_exper<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">0</span>]) <span class="co"># Experimental subset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8863038</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(d<span class="sc">$</span>re78[d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(d<span class="sc">$</span>re78[d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">0</span>]) <span class="co"># Observational dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -16.54134</code></pre>
+</div>
+</div>
+<p>If we look at the experiment subset data, the effect of the job training treatment seems to be $0.89k.</p>
+<p>However, when we look at the observational data, it seems that the treatment effect is negative $16.54k, which means receiving the training program makes people’s income decrease by 16.54 thousand dollars compared to those who did not receive. This is just naive estimate and we will need to consider other factors that may contribute to income gap in the following analysis to find out the actual effect of the job training program.</p>
+</section>
+<section id="regression" class="level2">
+<h2 class="anchored" data-anchor-id="regression">7.1.2 Regression</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crude regression without any adjustments</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> d)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-22.518  -9.218  -0.318   7.082  98.482 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  22.5177     0.3193   70.52   &lt;2e-16 ***
+treat       -16.5413     0.9282  -17.82   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.02 on 2508 degrees of freedom
+Multiple R-squared:  0.1124,    Adjusted R-squared:  0.112 
+F-statistic: 317.6 on 1 and 2508 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Regression adjust for income and other socio-economic status</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(re78 <span class="sc">~</span> treat <span class="sc">+</span> age <span class="sc">+</span> educ <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> re74 <span class="sc">+</span> re75, <span class="at">data =</span> d)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat + age + educ + black + hisp + married + 
+    re74 + re75, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-63.702  -4.243  -0.396   3.839 110.167 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.21277    1.42920   0.149  0.88166    
+treat       -1.50882    0.81911  -1.842  0.06559 .  
+age         -0.06362    0.02212  -2.876  0.00406 ** 
+educ         0.60821    0.07904   7.695 2.02e-14 ***
+black       -0.50734    0.51875  -0.978  0.32817    
+hisp         1.45946    1.07771   1.354  0.17579    
+married      1.00049    0.62050   1.612  0.10700    
+re74         0.26699    0.02968   8.996  &lt; 2e-16 ***
+re75         0.54552    0.02908  18.762  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.16 on 2501 degrees of freedom
+Multiple R-squared:  0.5952,    Adjusted R-squared:  0.5939 
+F-statistic: 459.7 on 8 and 2501 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The regression still shows that the effect of the program is negative (though not significant after we adjust for the income level)</p>
+</section>
+<section id="exact-matching" class="level2">
+<h2 class="anchored" data-anchor-id="exact-matching">7.1.3 Exact matching</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ematch <span class="ot">&lt;-</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matchit</span>(treat <span class="sc">~</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> nodegr <span class="sc">+</span> u74 <span class="sc">+</span> u75, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> d,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">"exact"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ematch)[[<span class="dv">2</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 Control Treated
+All (ESS)     2213.00000     297
+All           2213.00000     297
+Matched (ESS)   59.52143     287
+Matched       2092.00000     287
+Unmatched      121.00000      10
+Discarded        0.00000       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ematch_data <span class="ot">&lt;-</span> <span class="fu">match.data</span>(ematch)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>emod <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">formula =</span> re78 <span class="sc">~</span> treat, <span class="at">data =</span> ematch_data, <span class="at">weights =</span> weights)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(emod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat, data = ematch_data, weights = weights)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-109.035    0.610    2.407    4.770  113.179 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   8.2437     0.2317  35.577  &lt; 2e-16 ***
+treat        -2.3863     0.6671  -3.577 0.000354 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 10.6 on 2377 degrees of freedom
+Multiple R-squared:  0.005354,  Adjusted R-squared:  0.004936 
+F-statistic:  12.8 on 1 and 2377 DF,  p-value: 0.0003545</code></pre>
+</div>
+</div>
+<p>10 treated cases cannot be matched.</p>
+<p>FSATT is negative $2.39k, which means those who participated in the training program have $2.39k compared to those did not.</p>
+</section>
+<section id="propensity-score-use-glm" class="level2">
+<h2 class="anchored" data-anchor-id="propensity-score-use-glm">7.1.4 Propensity score use <code>glm()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ps_mod <span class="ot">&lt;-</span> <span class="fu">glm</span>(<span class="at">formula =</span> treat <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> educ <span class="sc">+</span> <span class="fu">I</span>(educ<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> nodegr <span class="sc">+</span> re74 <span class="sc">+</span> <span class="fu">I</span>(re74<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> re75 <span class="sc">+</span> <span class="fu">I</span>(re75<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> u74 <span class="sc">+</span> u75, <span class="at">data =</span> d, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ps_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = treat ~ age + I(age^2) + educ + I(educ^2) + black + 
+    hisp + married + nodegr + re74 + I(re74^2) + re75 + I(re75^2) + 
+    u74 + u75, family = "binomial", data = d)
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -4.0860109  2.0931327  -1.952 0.050926 .  
+age          0.0885744  0.0972988   0.910 0.362647    
+I(age^2)    -0.0029497  0.0014994  -1.967 0.049147 *  
+educ         0.8446841  0.3120974   2.706 0.006800 ** 
+I(educ^2)   -0.0468130  0.0162233  -2.886 0.003908 ** 
+black        1.9621150  0.2719006   7.216 5.34e-13 ***
+hisp         2.4117400  0.4512282   5.345 9.05e-08 ***
+married     -2.0307420  0.2332962  -8.705  &lt; 2e-16 ***
+nodegr       0.0177758  0.3420739   0.052 0.958557    
+re74        -0.0560163  0.0511241  -1.096 0.273214    
+I(re74^2)    0.0012223  0.0016798   0.728 0.466828    
+re75        -0.1544280  0.0418499  -3.690 0.000224 ***
+I(re75^2)    0.0004442  0.0012405   0.358 0.720281    
+u74          2.3537938  0.4966435   4.739 2.14e-06 ***
+u75         -1.2273787  0.4540319  -2.703 0.006866 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1825.16  on 2509  degrees of freedom
+Residual deviance:  610.11  on 2495  degrees of freedom
+AIC: 640.11
+
+Number of Fisher Scoring iterations: 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>ps <span class="ot">&lt;-</span> <span class="fu">predict</span>(ps_mod, <span class="at">data =</span> d, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> ps)) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>() <span class="sc">+</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>treat, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="HW7_syQiu_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The result shows that lower income (or no income), being black or hispanic, and being unmarried are positively associated with receiving the training program.</p>
+<p>Besides, age is non-linearly associated with receiving the treatment. With <span class="math inline">\(\frac{0.8447}{(-2) * (-0.0468)} \approx 9\)</span> as a boundary line, for those who receive less than 9 years of education, one more year of education is positively associated with participating in the training program, while for those who have more than 9 years of education, one more year of education is negatively associated with participating in the training program.</p>
+<p>From the density plot, we can see that those who actually treated has a higher propensity score, while the distribution of propensity score centers around 0 for the controlled group.</p>
+</section>
+<section id="att-using-weightit" class="level2">
+<h2 class="anchored" data-anchor-id="att-using-weightit">7.1.5 ATT using <code>weightit()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>psmatch <span class="ot">&lt;-</span> <span class="fu">weightit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> educ <span class="sc">+</span> <span class="fu">I</span>(educ<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> nodegr <span class="sc">+</span> re74 <span class="sc">+</span> <span class="fu">I</span>(re74<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> re75 <span class="sc">+</span> <span class="fu">I</span>(re75<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> u74 <span class="sc">+</span> u75, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"ps"</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">estimand =</span> <span class="st">"ATT"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some extreme weights were generated. Examine them with `summary()` and
+maybe trim them with `trim()`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">love_plot</span>(psmatch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="HW7_syQiu_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>psmod <span class="ot">&lt;-</span> <span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> d, <span class="at">weights =</span> psmatch<span class="sc">$</span>weights)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(psmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat, data = d, weights = psmatch$weights)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-24.136   0.086   0.418   1.226  54.332 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   4.8371     0.1714  28.229  &lt; 2e-16 ***
+treat         1.1393     0.2682   4.248 2.23e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.555 on 2508 degrees of freedom
+Multiple R-squared:  0.007144,  Adjusted R-squared:  0.006748 
+F-statistic: 18.05 on 1 and 2508 DF,  p-value: 2.234e-05</code></pre>
+</div>
+</div>
+<p>Only part of the covariates look balanced after adjustments.</p>
+<p>After weighting by the propensity score, the ATT is 1.14 (finally positive! though still a little different from the actual effect we can get from the experimental data.</p>
+</section>
+<section id="entropy-balancing" class="level2">
+<h2 class="anchored" data-anchor-id="entropy-balancing">7.1.6 Entropy balancing</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>etmatch <span class="ot">&lt;-</span> <span class="fu">weightit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> educ <span class="sc">+</span> <span class="fu">I</span>(educ<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> nodegr <span class="sc">+</span> re74 <span class="sc">+</span> <span class="fu">I</span>(re74<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> re75 <span class="sc">+</span> <span class="fu">I</span>(re75<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> u74 <span class="sc">+</span> u75, </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"ebal"</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">moments =</span> <span class="dv">3</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">estimand =</span> <span class="st">"ATT"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The optimization failed to converge in the alotted number of
+iterations. Try increasing `maxit`.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Some extreme weights were generated. Examine them with `summary()` and
+maybe trim them with `trim()`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">love_plot</span>(etmatch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="HW7_syQiu_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>etmod <span class="ot">&lt;-</span> <span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> d, <span class="at">weights =</span> etmatch<span class="sc">$</span>weights)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(etmod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat, data = d, weights = etmatch$weights)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-68.289   0.047   0.575   2.386 142.862 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.8019     0.1696  34.214   &lt;2e-16 ***
+treat         0.1744     0.4930   0.354    0.724    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 7.977 on 2508 degrees of freedom
+Multiple R-squared:  4.991e-05, Adjusted R-squared:  -0.0003488 
+F-statistic: 0.1252 on 1 and 2508 DF,  p-value: 0.7235</code></pre>
+</div>
+</div>
+<p>The balance looks better than the propensity score method. The ATT is 0.174.</p>
+</section>
+<section id="standard-error-using-bootstrapping" class="level2">
+<h2 class="anchored" data-anchor-id="standard-error-using-bootstrapping">7.1.7 Standard error using bootstrapping</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>psm_func <span class="ot">&lt;-</span> <span class="cf">function</span>(d){</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  sample_d <span class="ot">&lt;-</span> d[<span class="fu">sample</span>(<span class="fu">nrow</span>(d), <span class="at">replace =</span> <span class="cn">TRUE</span>),]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  psmatch <span class="ot">&lt;-</span> <span class="fu">weightit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> educ <span class="sc">+</span> <span class="fu">I</span>(educ<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> black <span class="sc">+</span> hisp <span class="sc">+</span> married <span class="sc">+</span> nodegr <span class="sc">+</span> re74 <span class="sc">+</span> <span class="fu">I</span>(re74<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> re75 <span class="sc">+</span> <span class="fu">I</span>(re75<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> u74 <span class="sc">+</span> u75, </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"ps"</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">estimand =</span> <span class="st">"ATT"</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> sample_d)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  est <span class="ot">&lt;-</span> <span class="fu">weighted.mean</span>(sample_d<span class="sc">$</span>re78[sample_d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">1</span>], <span class="at">w =</span> psmatch<span class="sc">$</span>weights[sample_d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">weighted.mean</span>(sample_d<span class="sc">$</span>re78[sample_d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">0</span>], <span class="at">w =</span> psmatch<span class="sc">$</span>weights[sample_d<span class="sc">$</span>treat <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(est)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>sim_size <span class="ot">&lt;-</span> <span class="dv">3000</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>sim_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">sim_id =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span>sim_size)</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">coef =</span> <span class="fu">psm_func</span>(d))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There were 3003 warnings in `mutate()`.
+The first warning was:
+ℹ In argument: `coef = psm_func(d)`.
+ℹ In row 1.
+Caused by warning:
+! Some extreme weights were generated. Examine them with `summary()` and maybe trim them with `trim()`.
+ℹ Run `dplyr::last_dplyr_warnings()` to see the 3002 remaining warnings.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sim_df<span class="sc">$</span>coef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.032815</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sim_df<span class="sc">$</span>coef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9560582</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
