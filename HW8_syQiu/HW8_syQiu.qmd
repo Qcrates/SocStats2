@@ -1,0 +1,138 @@
+---
+title: "Homework 8"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+---
+
+Set-up
+
+```{r}
+#|error: false
+#|warnings: false
+library(tidyverse)
+library(WeightIt)
+library(cobalt)
+library(ggplot2)
+```
+
+Data import:
+
+```{r}
+dict_url <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Childcare/data/datadict.txt"
+
+read_file(dict_url) |> 
+  writeLines()
+
+var_names <- c("momage", "b.marr", "momed", "work.dur", "prenatal", "cig", "booze", "sex", "first", "bw", "bwg", "preterm", "black", "hispanic", "white", "lths", "hs", "ltcoll", "college", "dayskidh", "st5", "st9", "st12", "st25", "st36", "st42", "st48", "st53", "st99", "income", "treat", "ppvtr.36")
+
+url <- "https://raw.githubusercontent.com/avehtari/ROS-Examples/master/Childcare/data/cc2.csv"
+
+d <- read_csv(url) |> 
+  select(all_of(var_names)) |> 
+  mutate(across(matches("st\\d{2}"), as.integer))
+
+glimpse(d)
+```
+
+# 8.1.1 Exclusion Criteria
+
+We can look at the distribution of birth weight for both control and treatment group:
+
+```{r}
+ggplot(data = d, aes(x = bw, color = as.factor(treat))) +
+  geom_histogram(fill = "white") + 
+  scale_color_manual(values = c("orange","purple")) +
+  theme_light()
+```
+
+We can see that the birth weight of babies in the control group have a higher average compared to the treatment group. The researchers exclude those extremely LBW children from the sample because this may be a confounding: extreme LBW can also be a factor of low child development and it will lead to an underestimate of the effect of the treatment program.
+
+# 8.1.2 Which to use?
+
+I will include these variables that are relevant to the receipt of the treatment:
+
+-   `bwg` , `bw`
+
+-   `preterm`
+
+-   `st99, st5, st9, st12, st25, st36, st42, st48, st53`
+
+I will include these demographic characteristics of children themselves in the covariate balance because they can affect both the development come and birthweight and
+
+-   `sex`
+
+-   `first`
+
+```{=html}
+<!-- -->
+```
+-   Race and ethnicity variables: `black`, `hispanic` , `white`
+
+And also these characteristics of mothers/families:
+
+-   Mother's education: `lths`, `hs`, `ltcoll`, `college`
+
+-   `momage`
+
+-   `b.marr`
+
+-   `work.dur`
+
+-   `cig`
+
+-   `booze`
+
+-   `income`
+
+# 8.1.3 Balance covariates
+
+## Balancing process
+
+```{r}
+wt_form <- "treat ~ momage + I(momage^2) + b.marr + prenatal + sex + first + bwg + black + hispanic + white + momed + st99 + income"
+
+PSW1<- weightit(as.formula(wt_form), 
+               method = "ps",
+               estimand = "ATT",
+               data = d)
+
+
+summary(PSW1)
+love.plot(PSW1,
+          binary = "std",
+          stats = c("m","ks"),
+          thresholds = c(.1))
+
+bal.plot(PSW1, which = "both")
+
+# CBPS
+CBPS1 <- weightit(as.formula(wt_form), 
+               method = "cbps",
+               estimand = "ATT",
+               data = d)
+love.plot(CBPS1,
+          binary = "std",
+          stats = c("m","ks"),
+          thresholds = c(.1))
+
+
+# Entrophy Balancing
+EB1<- weightit(as.formula(wt_form), 
+               method = "ebal",
+               estimand = "ATT",
+               data = d)
+love.plot(EB1,
+          binary = "std",
+          stats = c("m","ks"),
+          thresholds = c(.1))
+```
+
+Entrophy weighting did the best job compared to the other two. However I will need to cut some of the covariates from the list (for example I use the continuous education years to replace the categorical variable).
+
+```{r}
+mod1 <- lm(formula = ppvtr.36 ~ treat, data = d, weights = EB1$weights)
+summary(mod1)
+```
+
+This shows that the treatment effect is an increase of 6.069 in the test scores.
