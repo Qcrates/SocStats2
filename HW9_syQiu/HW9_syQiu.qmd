@@ -1,0 +1,283 @@
+---
+title: "Homework 9"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+embed-resources: true
+---
+
+Set-up
+
+```{r}
+#| error: false
+#| warning: false
+set.seed(27705)
+
+library(tidyverse)
+library(ggplot2)
+library(gssr)
+library(DiagrammeR)
+library(WeightIt)
+library(MatchIt)
+library(marginaleffects)
+library(cobalt)
+
+gss2022 <- gss_get_yr(2022)
+
+```
+
+Research question: Does being a single child affect a person's fertility willingness?
+
+My initial guess: There is a habitually lower fertility willingness across generations.
+
+# 9.1 Naive Estimate
+
+```{r}
+d <- gss2022 |> 
+  mutate(is_single_child = ifelse(sibs == 0, T, F))
+
+mod0 <- lm(formula = childs ~ is_single_child, data = d)
+
+summary(mod0)
+```
+
+Naive estimate is -0.332. It can be interpreted as those who were single child will have an average of 0.332 fewer children than those who were not single child.
+
+# 9.2 DAG
+
+The naive estimate is consistent with my initial guess that lower fertility is consistent across generations. However, there are also other factors that may be the confounder of this relationship.
+
+```{r}
+DiagrammeR::grViz("
+digraph{
+  graph []
+  node [shape = plaintext]
+    T [label = 'Being a Single Child']
+    Y [label = 'The Number of Children']
+    A [label = 'Parental Education Level']
+    C [label = 'Education']
+    D [label = 'Income']
+    E [label = 'Marriage']
+    G [label = 'Gender']
+    H [label = 'Birth Cohort']
+    
+  edge []
+    T -> Y
+    A -> T
+    A -> C
+    C -> Y
+    C -> D
+    D -> Y
+    T -> C
+    C -> E
+    E -> Y
+    E -> D
+    G -> C
+    G -> E
+    G -> D
+    G -> Y
+    H -> T
+    H -> E
+    H -> D
+    H -> Y
+}
+")
+```
+
+My estimand (the gap in the number of children between single children and non-single children) is ATE.
+
+# 9.3 Covariates
+
+```{r}
+d <- gss2022 |> 
+  mutate(
+    pardeg = pmax(madeg, padeg, na.rm = TRUE),
+    is_single_child = case_when(
+      sibs == 0 ~ TRUE,
+      sibs > 0 ~ FALSE,
+      TRUE ~ NA_integer_
+    ),
+    is_female = ifelse(sex == 2, T, F),
+    is_married = ifelse(marital == 1, T, F),
+    inc = scale(realinc),
+    non_white = ifelse(race != 1, T, F),
+    college = ifelse(degree >= 3, 1L, 0L),
+    birthyear = 2022 - age,
+    birthcohort = case_when(
+      birthyear >= 1928 & birthyear <= 1945 ~ "Silent Gen",
+      birthyear >= 1946 & birthyear <= 1964 ~ "Baby Boomers",
+      birthyear >= 1965 & birthyear <= 1980 ~ "Gen X",
+      birthyear >= 1981 & birthyear <= 1996 ~ "Gen Y",
+      birthyear >= 1997 & birthyear <= 2012 ~ "Gen Z",
+      birthyear >= 2013 ~ "Gen A",
+      TRUE ~ NA_character_
+    )
+    ) |> 
+  select(childs, is_single_child, pardeg, is_female, is_married, inc, non_white, college, birthcohort, income) |> 
+  drop_na()
+
+summary(d)
+```
+
+Following the above causal diagram, I included the above variables in the causal identification process:
+
+-   `childs`: The outcome variable describing the number of children the respondent has.
+
+-   `is_single_child`: The main treatment variable. I recoded it as a logical variable from `sibs` (). A respondent has `is_single_child` as `TRUE` if they report to have no siblings.
+
+    -   Note: GSS counts siblings who born alive but no longer living, as well as those alive now. It also counts stepbrothers and stepsisters, and children adopted by respondents' parents.
+
+-   `pardeg`: Parents' education level, measured by whichever is higher. It is a categorical variable with five levels: less than high school (reference level), high school (`pardeg` = 1), associate/junior college (`pardeg` = 2), bachelor (`pardeg` = 3), and graduate (`pardeg` = 4).
+
+-   `is_female`: A logical variable measuring the respondents' gender. 1 if the respondent reports to be a female and 0 if not.
+
+-   `is_married`: A logical variable measuring the respondents' marital status. 1 if the respondent is married, and 0 if not.
+
+-   `inc`: Standardized household income, measured in 1986 constant dollars.
+
+-   `non_white`: A logical variable measuring the respondents' race. 1 if the respondent is a white, and 0 if not.
+
+-   `college`: A logical variable measuring the respondents' education level. 1 if the respondent has a college degree, and 0 if not.
+
+-   `birthcohort`: A categorical variable showing the respondents' birth cohort, derived from their age measured in 2022. It includes five levels in the GSS dataset: Silent Generation (1928-1945), Baby Boomers (1946-1964), Generation X (1965-1980), Generation Y (1981-1996), and Generation Z (1997-2012). I set generation X as the reference level.
+
+    -   GSS only surveys respondents older than 18 years old, thus we do not have Generation Alpha (2013-).
+
+# 9.4 Regression
+
+If the model only adjust for confounders (parental education, birth cohort and gender), excluding colliders from the model.
+
+```{r}
+mod1 <- lm(formula = childs ~ is_single_child + factor(pardeg) + is_female + birthcohort, data = d)
+summary(mod1)
+```
+
+```{r}
+mod2 <- lm(formula = childs ~ is_single_child + factor(pardeg) + inc + I(inc^2) + is_female * is_married + non_white + college + birthcohort, data = d)
+summary(mod2)
+```
+
+After adjusting for all covariates in the DAG, the treatment group (single child) still bears fewer children than others with siblings. The difference now turns to 0.292 fewer children. The gap is still statistically significant.
+
+# 9.5 Weighting
+
+### 9.5.1 Propensity Score Weighting
+
+```{r}
+weight_ff_inccat <- "is_single_child ~ factor(pardeg) + factor(income) + is_female * is_married + non_white + college + birthcohort"
+
+weight_ff_inccont <- "is_single_child ~ factor(pardeg) + inc + I(inc^2) + is_female * is_married + non_white + college + birthcohort"
+
+reg_ff <- "childs ~ is_single_child + factor(pardeg) + inc + I(inc^2) + is_female * is_married + non_white + college + birthcohort"
+
+PSW_cont <- weightit(as.formula(weight_ff_inccont), 
+               method = "ps",
+               estimand = "ATE",
+               data = d)
+
+love.plot(PSW_cont, thresholds = c(0.1, 0.05), stats = c("m","ks"))
+
+mod_psw_cont <- lm(formula = childs ~ is_single_child,
+              data = d,
+              weights = PSW_cont$weights)
+
+summary(mod_psw_cont)
+
+PSW_cat <- weightit(as.formula(weight_ff_inccat), 
+               method = "ps",
+               estimand = "ATE",
+               data = d)
+
+love.plot(PSW_cat, thresholds = c(0.1, 0.05), stats = c("m","ks"))
+
+mod_psw_cat <- lm(formula = childs ~ is_single_child,
+              data = d,
+              weights = PSW_cat$weights)
+
+summary(mod_psw_cat)
+
+
+```
+
+The mean differences all fall into the thresholds of 0.1 after the adjustment. However the distribution (KS Stats) of income and its quadratic term still has some differences.
+
+The propensity-score-weighted model shows that single children have an average of 0.260 fewer children than those who have siblings, which is statistically significant.
+
+I tried to use the categorical household income variable in GSS. The balance looks much better, but those with highest income still could not match their distribution (ks plots). However one thing to note is that the balance of the propensity score is worse than the previous way with continuous income variable.
+
+With this way, those single children have an average of 0.276 fewer children than those who have siblings. The difference is statistically significant at a confidence level of 95%.
+
+### 9.5.2 Entrophy Weighting
+
+```{r}
+EbalW <- weightit(as.formula(weight_ff_inccont), 
+               method = "ebal",
+               estimand = "ATE",
+               data = d)
+
+love.plot(EbalW, thresholds = c(0.1, 0.05), stats = c("m","ks"))
+
+mod_ebal <- lm(formula = childs ~ is_single_child,
+              data = d,
+              weights = EbalW$weights)
+
+summary(mod_ebal)
+```
+
+The entrophy balance weighting could perfectly balance the covariate in mean differences, but income variables still do not show a good balance.
+
+The weighted model shows that there is a statistically significant gap in the number of children between single children and those with siblings (coef = -0.318).
+
+### 9.5.3 CBPS
+
+```{r}
+CBPSW_cont <- weightit(as.formula(weight_ff_inccont), 
+               method = "cbps",
+               estimand = "ATE",
+               data = d)
+
+love.plot(CBPSW_cont, thresholds = c(0.1, 0.05), stats = c("m","ks"))
+
+mod_cbps_cont <- lm(formula = childs ~ is_single_child,
+              data = d,
+              weights = CBPSW_cont$weights)
+
+summary(mod_cbps_cont)
+
+CBPSW_cat <- weightit(as.formula(weight_ff_inccat), 
+               method = "cbps",
+               estimand = "ATE",
+               data = d)
+
+love.plot(CBPSW_cat, thresholds = c(0.1, 0.05), stats = c("m","ks"))
+
+mod_cbps_cat <- lm(formula = childs ~ is_single_child,
+              data = d,
+              weights = CBPSW_cat$weights)
+
+summary(mod_cbps_cat)
+```
+
+We can still observe this gap in the number of children (around 0.28) between single children and those with siblings.
+
+# 9.6 Double Robustness
+
+```{r}
+mod_final <- lm(formula = as.formula(reg_ff),
+                data = d,
+                weights = mod_psw_cat$weights)
+
+summary(mod_final)
+```
+
+The double-robust model (both weighted and adjusted) also shows that single children tend to bear 0.318 fewer children compared to those who have siblings.
+
+# 9.7 Summary
+
+In the realm of demographic studies, the concept of inter-generational fertility transmission - how parental fertility patterns influence the reproductive behaviors of their offspring - presents a compelling field of inquiry. While some may argue that children will follow their parents' habit of fertility, opponents may argue that children may have an opposite fertility pattern compared to their parents based on their experience of growing (e.g. single children may be eager for more children because of their eager for siblings/peers during the growth). However, due to the general trend of having fewer children, it is hard to distinguish the effect of parents' fertility pattern on children's fertility pattern.
+
+Grounded in the hypothesis that single children are likely to have fewer children themselves, this study employed a three-step method to examine the inter-generational transmission of fertility inertia. First of all, a regression model adjusted for all possible covariates is used to examine the association between being a single children and having fewer children. Then, I use three different weighted model to further examine this inter-generational fertility inertia, including propensity score weighting, entrophy weighting and also covariate balance propensity score weighting. In the end, I constructed a double-robust model with both covariate adjustments and weights from the propensity score method.
+
+The data utilized in this short analysis is GSS 2021 dataset. Only adults (\> 18 years old) is included in this sample. I used the number of children (a continuous integer variable) as the outcome variable and a binary indicator of whether the respondent is a single child as the exposure/treatment variable. The covariate variable set include: the number of years of parental education (father's or mother's education level, whichever is higher), household income and its quadratic term, respondents' gender, respondents' marital status, respondents' race, respondents' education and their birth cohort.
+
+From the regression results, I found that those respondents who are single children have fewer children themselves than other respondents who have siblings. The estimated gap is about 0.29 offspring. This association is significant in models across all three steps of only covariate adjustment, weighted model, and double-robust model.
