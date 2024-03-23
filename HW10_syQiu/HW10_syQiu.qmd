@@ -1,0 +1,152 @@
+---
+title: "Homework 10"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+embed-resources: true
+---
+
+Package and setup
+
+```{r}
+#| error: false
+#| warning: false
+set.seed(27705)
+library(tidyverse)
+library(panelr)
+library(gapminder)
+library(ggeffects)
+```
+
+# 10.1 Data Reshaping
+
+Example code
+
+```{r}
+gap_wide <- gapminder::gapminder |> 
+  select(continent, country, year, lifeExp, gdpPercap) |> 
+  pivot_wider(
+    names_from = year,
+    values_from = c(lifeExp, gdpPercap),
+    names_sep = ""
+  )
+
+head(gap_wide)
+```
+
+Use `long_panel()` function from `panelr` package to reshape the `gap_wide` into long form
+
+```{r}
+gap_long <- gap_wide |> 
+  long_panel(
+    id = c("country"),
+    wave = "year",
+    begin = 1952,
+    end = 2007,
+    periods = seq(1952, 2007, 5)
+  )
+
+# test whether the transformation procedure give exact the same data frame
+all_equal(gap_long, gapminder::gapminder |> select(continent, country, year, lifeExp, gdpPercap) |> mutate(year = as.double(year)))
+
+
+# Set as panel data before reshape
+gap_long_panel <- panel_data(gap_long, id = "country", wave = "year")
+gap_wide <- gap_long |> 
+  widen_panel(
+    separator = ""
+  )
+
+# test whether the transformation procedure give exact the same data frame
+all_equal(gap_wide, gapminder::gapminder |> 
+  select(continent, country, year, lifeExp, gdpPercap) |> 
+  pivot_wider(
+    names_from = year,
+    values_from = c(lifeExp, gdpPercap),
+    names_sep = ""
+  ))
+```
+
+# 10.2 Plots
+
+```{r}
+gap_long |> 
+  filter(country %in% sample(unique(gap_long$country), size = 10)) |> 
+  ggplot(aes(x = year, y = lifeExp, group = country, color = country)) +
+  geom_line() + 
+  theme_light()
+```
+
+# 10.3 ICC
+
+$$
+ICC = \frac{\tau^2}{\tau^2+\sigma^2}
+$$
+
+```{r}
+## Between Variance
+bvar <- gapminder::gapminder |> 
+  group_by(country) |> 
+  summarise(mean_lifeExp = mean(lifeExp),
+            mean_pop = mean(pop),
+            mean_gdpPercap = mean(gdpPercap)) |> 
+  ungroup() |> 
+  pivot_longer(cols = starts_with("mean_"),
+               names_prefix = "mean_",
+               names_to = "variable",
+               values_to = "mean") |> 
+  group_by(variable) |> 
+  summarise(bvar = var(mean))
+  
+## Within Variance
+wvar <- gapminder::gapminder |> 
+  group_by(country) |> 
+  mutate(dev_lifeExp = lifeExp - mean(lifeExp),
+         dev_pop = pop - mean(pop),
+         dev_gdpPercap = gdpPercap - mean(gdpPercap)) |> 
+  ungroup() |> 
+  pivot_longer(cols = starts_with("dev_"),
+               names_prefix = "dev_",
+               names_to = "variable",
+               values_to = "dev") |> 
+  group_by(variable) |> 
+  summarise(wvar = var(dev))
+
+## Merge and calculate ICC
+icc <- bvar |> 
+  left_join(wvar, by = "variable") |> 
+  mutate(icc = bvar/(bvar+wvar))
+
+icc
+```
+
+# 10.4 Regressions
+
+```{r}
+# Import dataset
+df <- panelr::WageData |> 
+  mutate(clg = ifelse(ed >= 16, 1L, 0L),
+         t0 = t-1)
+# Regressions
+mod1 <- lmer(formula = lwage ~ clg + t0 + (1|id),
+             data = df,
+             REML = FALSE)
+
+summary(mod1)
+
+mod2 <- lmer(formula = lwage ~ clg + t0 + (1 + t0|id),
+             data = df,
+             REML = FALSE)
+
+summary(mod2)
+
+mod3 <- lmer(formula = lwage ~ clg + t0 + I(t0^2) + (1 + t0 + t0^2|id),
+             data = df,
+             REML = FALSE)
+
+summary(mod3)
+
+BIC(mod1, mod2, mod3)
+
+ggpredict(mod3, terms = c("t0 [all]", "id [sample = 9]", "clg"), type = "re") |> plot()
+```
