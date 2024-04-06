@@ -1,0 +1,166 @@
+---
+title: "Week 11"
+author: "Shuyi Qiu"
+format: html
+editor: visual
+embed-resources: true
+---
+
+# 11.1 Assumption
+
+For event study, we need to hold the assumption that the time trend is consistent before the event and after the event. In other words, what's going on before the event will continue as it is going now after the event.
+
+In DiD, we have the control group to compare with thus we do not have to make sure the time trend is consistent, as long as the parallel trend holds.
+
+# 11. 2 Backdoor path
+
+Which of the following potential back doors is controlled for by comparing the treated group to a control group? b
+
+a.  The treated group may be following a trend, unique to the group, that would make the outcome change from before-treatment to after-treatment anyway
+
+b.  **There may be events affecting everyone that would change the outcome from before-treatment to after-treatment anyway**
+
+c.  There may be differences in typical outcome levels between the treated group and the untreated group
+
+d.  The decision to treat the treated group, rather than some other group, may be based on factors that are related to the outcome
+
+# 11.3 Parallel Trend I 
+
+a.  This is possible. Parallel trend assumption actually is a counterfactual thing that cannot be examined/tested: if the treatment does not take place, the treatment group and control group will have the same difference as the pre-treatment period. Although the treatment and control group have exactly the same outcomes in the pre-treatment period, this does not necessarily mean that this consistent trend will keep going on in the post-treatment period.
+b.  The effect will be biased (either overestimated or underestimated), because we assume that the post-treatment difference without treatment to be the same as the pre-treatment difference, which is 0, but it is not.
+
+# 11.4 Parallel Trend II: Practice
+
+a.  The prior trend does not hold the parallel trend assumption (except for the short time period before the treatment).
+
+b.  We are likely to underestimate actual causal effect, as the before-event difference is overestimated.
+
+# 11.5 COVID case
+
+US may not be a good control group to examine the effect of lockdown policy, as the parallel trend assumption may not hold. Although we can see that US and Canada COVID case rates follow a similar trend, it does not necessarily mean that the parallel trend assumption holds. US has a higher rate, which may lead to a totally different pattern of development (e.g. breakout) without the treatment of lockdown compared to Canada, in that way, the effect of lockdown policy will be overestimated.
+
+# 11.6 Calculation
+
+|           | Before | After |
+|-----------|--------|-------|
+| Treated   | 5      | 9     |
+| Untreated | 6      | 7.5   |
+
+Before-treatment difference: 5 - 6 = -1
+
+After-treatment difference: 9 - 7.5 = 1.5
+
+DiD estimate = 1.5 - (-1) = 2.5
+
+# 11.7 Voter-protection Laws example
+
+a.  Which of the following best describes what you’d want to regress state-and-year level “voter turnout” measures on?
+
+    i.  An indicator for whether the state is treated, and an indicator for whether the year is 2016.
+
+    ii. A set of fixed effects for state, and a set of fixed effects for year.
+
+    iii. **An indicator for whether the state is treated, a set of fixed effects for year, and an indicator for whether the state is currently treated.**
+
+    iv. A set of fixed effects for state, and for year, and an interaction between “is 2016” and “is a treated state”.
+
+    v.  This design should not be estimated using a regression.
+
+b.  The coefficient before the indicator for whether the state is currently treated.
+
+# 11.8 Two-way Fixed Effects DiD
+
+Two-way fixed effect DiD estimator is the results we can get from a regression model with fixed effects for group and time period and clustered at the group level.
+
+# 11.9 Graphs
+
+a.  The difference between treatment group and control group at time 1 is significantly higher than 0 (the confidence interval does not contain the x axis), which may indicate that the parallel assumption does not hold in this case.
+
+b.  The treatment has a effect, but this effect diminishes over time.
+
+# 11.10 Practice: Interest in Sourdough Bread
+
+1.  Import the dataset
+
+```{r}
+#| error: false
+#| warning: false
+library(tidyverse)
+
+url <- "https://raw.githubusercontent.com/NickCH-K/TheEffectAssignments/main/sourdough_trends.csv"
+
+sr <- read_csv(url) |> 
+  select(date, keyword, hits) |> 
+  mutate(
+    date = as.Date(date),
+    keyword = factor(keyword)
+  )
+
+glimpse(sr)
+```
+
+2.  Visualize
+
+    ```{r}
+    library(ggplot2)
+    ggplot(sr, aes(x = date, y = hits, group = keyword, color = keyword)) +
+      geom_line() +
+      geom_vline(xintercept = as.Date("2020-03-15")) + 
+      theme_light()
+    ```
+
+3.  Observation
+
+    a.  It seems that the popularity of sourdough is affected by the COVID lockdown, but it depends on which control group we select. If we compare with the cereal as the control group, which holds a parallel trend with sourdough before lockdown, it seems that lockdown increases the popularity of sourdough.
+    b.  This effect is just a temporary effect that diminishes gradually after June.
+    c.  I am concerned about soup as the control group, then sandwich group, because they seem to fail to hold the parallel assumption before the lockdown.
+
+4.  Placebo test
+
+    I use Feb. 10th, 2022 as the fake treatment period
+
+    ```{r}
+    library(fixest)
+    pt <- sr |> 
+      filter(date < as.Date("2020-03-15")) |> # only keep data came before treatment
+      mutate(
+        FakeTreat = keyword == "sourdough" & date >= as.Date("2020-02-10")
+      )
+
+    ptmod1 <- feols(hits ~ FakeTreat | keyword + date, data = pt)
+    summary(ptmod1)
+
+    # If we drop the soup group
+    pt <- sr |> 
+      filter(date < as.Date("2020-03-15") & keyword != "soup") |> # only keep data came before treatment
+      mutate(
+        FakeTreat = keyword == "sourdough" & date >= as.Date("2020-02-10")
+      )
+
+    ptmod2 <- feols(hits ~ FakeTreat | keyword + date, data = pt)
+    summary(ptmod2)
+    ```
+
+    I cannot reject parallel trend in my model.
+
+5.  TWFE model
+
+    ```{r}
+    sr <- sr |> 
+      filter(keyword != "soup") |> 
+      mutate(
+        month = lubridate::month(date - days(x = 14)),
+        month = ifelse(month > 10, month - 12 - 2, month - 2),
+        Treated = ifelse(keyword == "sourdough", T, F)
+      )
+
+    dynamic <- feols(
+      hits ~ i(month, Treated, ref = 0) | keyword + month,
+      cluster = "keyword",
+      data = sr
+    )
+
+    coefplot(dynamic)
+    ```
+
+    We can see a significant positive effect after lockdown!
